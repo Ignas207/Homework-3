@@ -4,6 +4,7 @@
 #include <openssl/sha.h> //openssl-dev is a dependency
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define FIRST_NAME_POOL {"Ants", "Kadri", "Artur", "Urmas", "Mart", "Toomas",\
     "Mihhail", "Yana", "Taavi", "Edgar", "Keit", "Ivari", "Sven", "Hanno",\
@@ -23,5 +24,6 @@
 #define LEN_HASH 66
 
 int GetRand(int numMin, int numMax);
+float GetRandFloat(float numMin, float numMax);
 
 #endif
