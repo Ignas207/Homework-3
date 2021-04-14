@@ -8,6 +8,9 @@
 #define TRANSACTION_DIGEST_LEN 42
 #define LEN_TEMP 200
 
+#define FILE_INPUT_ACCOUNT "accounts_data_completed.txt"
+#define FILE_INPUT_TRANSACTIONS "transactions_data_completed.txt"
+
 typedef struct
 {
     char *fistName;
@@ -23,6 +26,7 @@ typedef struct
     char *date;
     char *time;
     char *description;
+    float balanceDelta;
 } Transactions;
 
 

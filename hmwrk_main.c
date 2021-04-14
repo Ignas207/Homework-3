@@ -4,8 +4,8 @@
 int main(void)
 {
     int amount = 0;
-    Accounts *A;
-    Transactions *T;
-    
+    Accounts *A = NULL;
+    Transactions *T = NULL;
+    Reading(&A, &T, FILE_INPUT_ACCOUNT, FILE_INPUT_TRANSACTIONS);
     return 0;
 }

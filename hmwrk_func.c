@@ -27,24 +27,26 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
     {
         printf("Could not open %s!\n", inputTransactions);
         printf("The program will now exit!\n");
-        if(fInputAccounts =! NULL)
+        if(fInputAccounts != NULL)
             fclose(fInputAccounts);
         exit(EXIT_FAILURE);
     }
 
-    while(fgets(temp, LEN_TEMP, fInputTransactions) != NULL) //getting the full line into temp
+    while(fgets(temp, LEN_TEMP, fInputAccounts) != NULL) //getting the full line into temp
     {
         for(j = 1; j <= 4; j++) //filling the structure members
         {
             ExtractString(temp, temp2, j); //getting our desired string
             if(amount_accounts <= i)
             {
-                if(MemAlloc((void *)&A, 2*(1+i), 'a')) //alocating memory for structure
+                if(MemAlloc((void *)A, 2*(1+i), 'a')) //alocating memory for structure
                     amount_accounts = 2*(1 + i);
                 else
                 {
                     printf("Error occoured when allocating memory!\n");
                     printf("Will skip the line %d!\n", i);
+                    j = 4;
+                    i--;
                     break;
                 }
             }
@@ -53,53 +55,127 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
             switch(j)
             {
                 case 1:
-                    if(MemAlloc((void *)&(*A +i)->fistName, strlen(temp2) +1, 'c')) //alocating memory for string
+                    if(MemAlloc((void *)&(*A +i)->fistName, (int)strlen(temp2) +1, 'c')) //alocating memory for string
                         strncpy((*A + i)->fistName, temp2, strlen(temp2)); //if any of these is empty, there was a problem
                     else
                     {
                         printf("Error occoured when allocating memory!\n");
-                        printf("Will skip the line %d!\n", i);
+                        printf("Will skip the line %d!\n", i+1);
+                        j = 4;
+                        i--;
                         break;
                     }
                     break;
                 case 2:
-                    if(MemAlloc((void *)&(*A +i)->lastName, strlen(temp2) +1, 'c')) //alocating memory for string
+                    if(MemAlloc((void *)&(*A +i)->lastName, (int)strlen(temp2) +1, 'c')) //alocating memory for string
                         strncpy((*A + i)->lastName, temp2, strlen(temp2));
                     else
                     {
                         printf("Error occoured when allocating memory!\n");
-                        printf("Will skip the line %d!\n", i);
+                        printf("Will skip the line %d!\n", i+1);
+                        j = 4;
+                        i--;
                         break;
                     }
                     break;
                 case 3:
-                    if(MemAlloc((void *)&(*A +i)->accountNumber, strlen(temp2) +1, 'c')) //alocating memory for string
-                        strncpy((*A + i)->accountNumber, temp2, strlen(temp2));
+                    strncpy((*A + i)->accountNumber, temp2, ACCOUNT_DIGEST_LEN);
+                    break;
+                case 4:
+                    (*A + i)->balance = (float)atof(temp2);
+                    break;
+            }
+        }
+        printf("%s %s %s %.2f\n", (*A + i)->fistName, (*A + i)->lastName, (*A + i)->accountNumber, (*A + i)->balance);
+        i++;
+    }
+    MemAlloc((void *)A, i, 'a');
+    amount_accounts = i;
+    i = 0;
+    fclose(fInputAccounts);
+
+    while(fgets(temp, LEN_TEMP, fInputTransactions) != NULL) //getting the full line into temp
+    {
+        for(j = 1; j <= 6; j++)
+        {
+            ExtractString(temp, temp2, j);
+            if(amount_transactions <= i)
+            {
+                if(MemAlloc((void*)T, 2* (i + 1), 't'))
+                    amount_transactions = 2* (i + 1);
+                else
+                {
+                    printf("Error occoured when allocating memory!\n");
+                    printf("Will skip the line %d!\n", i);
+                    j = 6;
+                    i--;
+                    break;
+                }
+            }
+            switch(j)
+            {
+                case 1:
+                    strncpy((*T + i)->transactionID, temp2, TRANSACTION_DIGEST_LEN);
+                    break;
+                case 2:
+                    strncpy((*T + i)->accountNumber, temp2, ACCOUNT_DIGEST_LEN);
+                    break;
+                case 3:
+                    if(MemAlloc((void*)&(*T + i)->date, strlen(temp2) +1, 'c'))
+                    {
+                        strncpy((*T + i)->date, temp2, strlen(temp2));
+                        *((*T + i)->date + strlen(temp2) +1) = '\0';
+                    }
                     else
                     {
                         printf("Error occoured when allocating memory!\n");
                         printf("Will skip the line %d!\n", i);
+                        j = 6;
+                        i--;
                         break;
                     }
                     break;
                 case 4:
-                    if(MemAlloc((void *)&(*A +i)->balance, strlen(temp2) +1, 'c')) //alocating memory for string
-                        strncpy((*A + i)->balance, temp2, strlen(temp2));
+                    if(MemAlloc((void*)&(*T + i)->time, strlen(temp2) +1, 'c'))
+                    {
+                        strncpy((*T + i)->time, temp2, strlen(temp2));
+                        *((*T + i)->time + strlen(temp2) +1) = '\0';
+                    }
                     else
                     {
                         printf("Error occoured when allocating memory!\n");
                         printf("Will skip the line %d!\n", i);
+                        j = 6;
+                        i--;
                         break;
                     }
                     break;
-                default:
+                case 5:
+                    (*T + i)->balanceDelta = atof(temp2);
                     break;
+                case 6:
+                    if(MemAlloc((void*)&(*T + i)->description, strlen(temp2) +1, 'c'))
+                    {
+                        strncpy((*T + i)->description, temp2, strlen(temp2));
+                        *((*T + i)->description + strlen(temp2) +1) = '\0';
+                    }
+                    else
+                    {
+                        printf("Error occoured when allocating memory!\n");
+                        printf("Will skip the line %d!\n", i);
+                        j = 6;
+                        i--;
+                        break;
+                    }
+                    break;          
             }
         }
+        printf("%s %s %s %s %.2f %s\n", (*T + i)->transactionID, (*T + i)->accountNumber, (*T + i)->date, (*T + i)->time, (*T + i)->balanceDelta, (*T + i)->description);
         i++;
     }
+    MemAlloc((void*)T, i, 't');
+    amount_transactions = i;
     fclose(fInputTransactions);
-    fclose(fInputAccounts);
     return 0;
 }
 
@@ -109,7 +185,7 @@ int ExtractString(char *input, char *output, int which)
 {
     int i = 0;
     int j = 0;
-    int size = strlen(input);
+    int size = (int)strlen(input);
     int counting = 0;
     int countingChar = 0;
     int start = 0;
@@ -121,11 +197,16 @@ int ExtractString(char *input, char *output, int which)
             counting++;
             if(counting == which)
             {
-                for(j = start; j < (size - start); j++)
+                for(j = start; j < i; j++)
                 {
+                    if(*(input + j) == ';')
+                        j++;
+                    if(*(input + j) == '\n')
+                        continue;
                     *(output + countingChar) = *(input + j);
+                    countingChar++;
                 }
-                *(output + countingChar +1) = '\0';
+                *(output + countingChar) = '\0';
                 return 1;
             }
             start = i;

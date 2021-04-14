@@ -1,8 +1,8 @@
-CFLAGS = -Wall -Wextra -Wconversion 
+CFLAGS = -g3 -Wall -Wextra -Wconversion 
 CC = gcc
 
 all: main func
-		$(CC) $(CFLAGS) -o homework2 main.o func.o
+		$(CC) $(CFLAGS) -o homework2.out main.o func.o
 		rm main.o func.o
 
 main:
