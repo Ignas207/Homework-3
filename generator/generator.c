@@ -79,8 +79,8 @@ int main(void)
 
         GetSHA1Hash(text_to_hash, &hash);
         hash[SHA_DIGEST_LENGTH -1] = '\0';
-        printf("%s %s %s %.2f\n", firstName, lastName, hash, GetRandFloat(100, 10000));
-        fprintf(OutputAccount, "%s %s %s %.2f\n", firstName, lastName, hash, GetRandFloat(100, 10000));
+        printf("%s;%s;%s;%.2f\n", firstName, lastName, hash, GetRandFloat(100, 10000));
+        fprintf(OutputAccount, "%s;%s;%s;%.2f\n", firstName, lastName, hash, GetRandFloat(100, 10000));
 
         for(int count = GetRand(1, 20), j = 0; j < count; j++)
         {
@@ -88,10 +88,10 @@ int main(void)
             GetSHA1Hash(currentTime, &transactoinID);
 
             memset(currentTime, 0, sizeof(currentTime));
-            snprintf(currentTime, sizeof(currentTime), "20%d-%d-%d %d:%d", GetRand(10, 21), GetRand(1, 12), GetRand(1, 31), GetRand(0, 23), GetRand(0, 59));
+            snprintf(currentTime, sizeof(currentTime), "20%d-%d-%d;%d:%d", GetRand(10, 21), GetRand(1, 12), GetRand(1, 31), GetRand(0, 23), GetRand(0, 59));
 
-            printf("%s %20s %s %.2f %s\n", transactoinID, hash, currentTime, GetRandFloat(-999, 999), bankDescriptions[GetRand(0, bankDescriptionsSize-1)]);
-            fprintf(OutputTransactions, "%s %20s %s %.2f %s\n", transactoinID, hash, currentTime, GetRandFloat(-999, 999), bankDescriptions[GetRand(0, bankDescriptionsSize-1)]);
+            printf("%s;%s;%s;%.2f;%s\n", transactoinID, hash, currentTime, GetRandFloat(-999, 999), bankDescriptions[GetRand(0, bankDescriptionsSize-1)]);
+            fprintf(OutputTransactions, "%s;%s;%s;%.2f;%s\n", transactoinID, hash, currentTime, GetRandFloat(-999, 999), bankDescriptions[GetRand(0, bankDescriptionsSize-1)]);
         }
         printf("\n");
     }

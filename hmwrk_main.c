@@ -3,5 +3,9 @@
 
 int main(void)
 {
+    int amount = 0;
+    Accounts *A;
+    Transactions *T;
+    
     return 0;
 }
