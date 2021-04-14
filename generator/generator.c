@@ -2,45 +2,62 @@
 #include "generator.h"
 
 
+
+
 int main(void)
 {
-    //srand(time(NULL));
-    int firstNamePoolSize, lastNamePoolSize;
+    srand(time(NULL));
+    int firstNamePoolSize, lastNamePoolSize, bankDescriptionsSize;
 
-    char fOutput[LEN_FILE] = {'\0'};
+    char fileAccounts[LEN_FILE] = {'\0'};
+    char fileTransactions[LEN_FILE] = {'\0'};
 
+    char *bankDescriptions[] = BANK_DESCRIPTIONS;
     char *firstNames[] = FIRST_NAME_POOL;
     char *lastNames[] = LAST_NAME_POOL;
 
+    float tempNum = 0;
+
     int amount = 0;
-    int i = 0;
+    int transactions = 0;
     int j = 0;
+    int i = 0;
 
-    unsigned char text_to_hash[LEN_FILE];
-    unsigned char hash[LEN_HASH];
+    char currentTime[100];
 
+    char text_to_hash[LEN_FILE];
+    char hash[SHA_DIGEST_LENGTH];
+    char transactoinID[SHA_DIGEST_LENGTH];
+
+    bankDescriptionsSize = sizeof(bankDescriptions) / sizeof(char*);
     firstNamePoolSize = sizeof(firstNames) / sizeof(char*);
     lastNamePoolSize = sizeof(lastNames) / sizeof(char*);
 
     char firstName[LEN_FILE];
     char lastName[LEN_FILE];
 
-    printf("Enter the output file name: ");
-    scanf("%s", fOutput);
+    printf("Enter the acounts file name: ");
+    scanf("%s", fileAccounts);
 
-    printf("foutput: %s\n", fOutput);
+    printf("Enter the transactions file name: ");
+    scanf("%s", fileTransactions);
    
-   /* FILE *Output = fopen(fOutput, "w");
-    if(Output == NULL)
+    FILE *OutputAccount = fopen(fileAccounts, "w");
+    if(OutputAccount == NULL)
     {
-        printf("File %s could not be created!\n", fOutput);
+        printf("File %s could not be created!\n", fileAccounts);
         exit(0);
-    } */
+    } 
+
+    FILE *OutputTransactions = fopen(fileTransactions, "w");
+    if(OutputTransactions == NULL)
+    {
+        printf("File %s could not be created!\n", fileAccounts);
+        exit(0);
+    }
     
     printf("Enter the amount of data fields you want to generate: ");
     scanf("%d*c", &amount);
-    
-    strncpy(text_to_hash, "this is a test for this hash", (size_t)30);
 
     //https://stackoverflow.com/questions/9284420/how-to-use-sha1-hashing-in-c-programming
 
@@ -51,21 +68,39 @@ int main(void)
         strcpy(firstName, firstNames[GetRand(0, firstNamePoolSize -1)]);
         strcpy(lastName, lastNames[GetRand(0, lastNamePoolSize -1)]);
 
+
         memset(text_to_hash, 0, sizeof(text_to_hash));
         memset(hash, 0, sizeof(hash));
-        strncpy(text_to_hash, firstName, strlen(firstName));
-        strncpy(text_to_hash, lastName, strlen(lastName));
+
+        snprintf(text_to_hash, sizeof(text_to_hash), "%s%s%f", firstName, lastName, GetRandFloat(0, 99999));
+        //printf("tex to hash: %s\n", text_to_hash);
         //strncpy(text_to_hash, (char)GetRandFloat(0, 9999), (size_t)5);
+        
 
-        printf("%s %s ", firstName, lastName);
-        SHA1(text_to_hash, (size_t)strlen(text_to_hash), hash);
-        for(j = 0; j < (int)strlen(hash); j+=2)
-            printf("%02X", hash[j]);
-        printf(" ");
-        printf("%.2f\n", GetRandFloat(100, 10000));
+        GetSHA1Hash(text_to_hash, &hash);
+        hash[SHA_DIGEST_LENGTH -1] = '\0';
+        printf("%s %s %s %.2f\n", firstName, lastName, hash, GetRandFloat(100, 10000));
+        fprintf(OutputAccount, "%s %s %s %.2f\n", firstName, lastName, hash, GetRandFloat(100, 10000));
+
+        for(int count = GetRand(1, 20), j = 0; j < count; j++)
+        {
+            sprintf(currentTime, "%f", time(NULL) * GetRandFloat(0, 99999));
+            GetSHA1Hash(currentTime, &transactoinID);
+
+            memset(currentTime, 0, sizeof(currentTime));
+            snprintf(currentTime, sizeof(currentTime), "20%d-%d-%d %d:%d", GetRand(10, 21), GetRand(1, 12), GetRand(1, 31), GetRand(0, 23), GetRand(0, 59));
+
+            printf("%s %20s %s %.2f %s\n", transactoinID, hash, currentTime, GetRandFloat(-999, 999), bankDescriptions[GetRand(0, bankDescriptionsSize-1)]);
+            fprintf(OutputTransactions, "%s %20s %s %.2f %s\n", transactoinID, hash, currentTime, GetRandFloat(-999, 999), bankDescriptions[GetRand(0, bankDescriptionsSize-1)]);
+        }
+        printf("\n");
     }
+    
+    if(OutputAccount != NULL)
+        fclose(OutputAccount);
+    if(OutputTransactions != NULL)
+        fclose(OutputTransactions);
 
-    //fclose(Output);
     return 0;
 }
 
@@ -78,4 +113,20 @@ float GetRandFloat(float numMin, float numMax)
 {
     float scale = (float)rand() / (float) RAND_MAX;
     return numMin + scale * ( numMax - numMin );
+}
+
+void GetSHA1Hash(char *text, char *hash)
+{
+    unsigned char tmphash[SHA_DIGEST_LENGTH *2];
+    int i = 0;
+
+    SHA_CTX ctx; //declare ctx as a temp for hashing algorithm
+    SHA1_Init(&ctx); //initialize the SHA1 algorithm
+    SHA1_Update(&ctx, text, sizeof(text)); //put the text value in the ctx variable hashing algorithm
+    SHA1_Final(tmphash, &ctx); //get the hash 
+
+    for(i = 0; i < SHA_DIGEST_LENGTH; i++)
+    {
+        sprintf((char *)&(hash[i*2]), "%02x", tmphash[i]);
+    }
 }

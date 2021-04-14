@@ -18,6 +18,9 @@
     "Randpere", "Raud", "Anvelt", "Tuus-Laul", "Ossinovski", "Reps", "Ratas",\
     "Seeder", "Purga"}
 
+#define BANK_DESCRIPTIONS {"Car loan", "Rent", "House Morgage", "Groceries", "School suplies", "Home improvement",\
+    "Internet plan", "Mobile phone plan", "Movies"}
+
 #define BLOCK_SIZE 64
 #define OUTPUT_SIZE 20
 #define LEN_FILE 100
@@ -25,5 +28,6 @@
 
 int GetRand(int numMin, int numMax);
 float GetRandFloat(float numMin, float numMax);
+void GetSHA1Hash(char *text, char *hash);
 
 #endif
