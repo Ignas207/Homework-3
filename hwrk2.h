@@ -2,9 +2,11 @@
 #define HMWRK2_H
 
 #include <stdlib.h>
+#include <string.h>
 
 #define ACCOUNT_DIGEST_LEN 20
 #define TRANSACTION_DIGEST_LEN 42
+#define LEN_TEMP 200
 
 typedef struct
 {
@@ -26,5 +28,7 @@ typedef struct
 
 int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions);
 int MemAlloc(void **data, int amount, char type);
+int ExtractString(char *input, char *output, int which);
+void WriteString();
 
 #endif

@@ -3,7 +3,14 @@
 
 int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions)
 {
+    char temp[LEN_TEMP];
+    char temp2[LEN_TEMP];
     int i = 0;
+    int j = 0;
+
+    int amount_accounts = 0;
+    int amount_transactions = 0;
+
     FILE *fInputAccounts = NULL;
     FILE *fInputTransactions = NULL;
 
@@ -25,7 +32,106 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
         exit(EXIT_FAILURE);
     }
 
-    
+    while(fgets(temp, LEN_TEMP, fInputTransactions) != NULL) //getting the full line into temp
+    {
+        for(j = 1; j <= 4; j++) //filling the structure members
+        {
+            ExtractString(temp, temp2, j); //getting our desired string
+            if(amount_accounts <= i)
+            {
+                if(MemAlloc((void *)&A, 2*(1+i), 'a')) //alocating memory for structure
+                    amount_accounts = 2*(1 + i);
+                else
+                {
+                    printf("Error occoured when allocating memory!\n");
+                    printf("Will skip the line %d!\n", i);
+                    break;
+                }
+            }
+
+            //change this to something better, like idk, a function?
+            switch(j)
+            {
+                case 1:
+                    if(MemAlloc((void *)&(*A +i)->fistName, strlen(temp2) +1, 'c')) //alocating memory for string
+                        strncpy((*A + i)->fistName, temp2, strlen(temp2)); //if any of these is empty, there was a problem
+                    else
+                    {
+                        printf("Error occoured when allocating memory!\n");
+                        printf("Will skip the line %d!\n", i);
+                        break;
+                    }
+                    break;
+                case 2:
+                    if(MemAlloc((void *)&(*A +i)->lastName, strlen(temp2) +1, 'c')) //alocating memory for string
+                        strncpy((*A + i)->lastName, temp2, strlen(temp2));
+                    else
+                    {
+                        printf("Error occoured when allocating memory!\n");
+                        printf("Will skip the line %d!\n", i);
+                        break;
+                    }
+                    break;
+                case 3:
+                    if(MemAlloc((void *)&(*A +i)->accountNumber, strlen(temp2) +1, 'c')) //alocating memory for string
+                        strncpy((*A + i)->accountNumber, temp2, strlen(temp2));
+                    else
+                    {
+                        printf("Error occoured when allocating memory!\n");
+                        printf("Will skip the line %d!\n", i);
+                        break;
+                    }
+                    break;
+                case 4:
+                    if(MemAlloc((void *)&(*A +i)->balance, strlen(temp2) +1, 'c')) //alocating memory for string
+                        strncpy((*A + i)->balance, temp2, strlen(temp2));
+                    else
+                    {
+                        printf("Error occoured when allocating memory!\n");
+                        printf("Will skip the line %d!\n", i);
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        i++;
+    }
+    fclose(fInputTransactions);
+    fclose(fInputAccounts);
+    return 0;
+}
+
+
+
+int ExtractString(char *input, char *output, int which)
+{
+    int i = 0;
+    int j = 0;
+    int size = strlen(input);
+    int counting = 0;
+    int countingChar = 0;
+    int start = 0;
+
+    for(i = 0; i <= size; i++)
+    {
+        if((*(input + i) == ';') || (*(input + i) == '\0'))
+        {
+            counting++;
+            if(counting == which)
+            {
+                for(j = start; j < (size - start); j++)
+                {
+                    *(output + countingChar) = *(input + j);
+                }
+                *(output + countingChar +1) = '\0';
+                return 1;
+            }
+            start = i;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -37,7 +143,8 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
  *                      1) i -> int
  *                      2) f -> float
  *                      3) c -> char
- *                      4) s -> structure
+ *                      4) a -> Accounts structure
+ *                      5) t -> Transactions structure
  *
  *  Returns:        1) 0 -> allocation failed
  *                  2) 1 -> allocation suceeded
@@ -85,6 +192,7 @@ int MemAlloc(void **data, int amount, char type)
                 temp = (Accounts *)realloc(*data, sizeAfter);
                 //memset(&temp + sizeInitial, 0, sizeAfter - sizeInitial);
             }
+            break;
         case 't':
             if(*data == NULL)
                 *data = (Transactions *)calloc((size_t)amount, sizeof(Transactions));
@@ -95,8 +203,21 @@ int MemAlloc(void **data, int amount, char type)
                 temp = (Transactions *)realloc(*data, sizeAfter);
                 //memset(&temp + sizeInitial, 0, sizeAfter - sizeInitial);
             }
-                
             break;
         default:
             break;
     }
+    if(*data == NULL)
+        return 0;
+    else if(temp != NULL)
+    {
+        if(*data != NULL && temp != NULL)
+        {
+            *data = temp;
+            return 1;
+        }
+        else
+            return 0;
+    }
+    return 1; 
+}
