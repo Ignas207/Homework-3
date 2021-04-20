@@ -34,7 +34,7 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
 
     while(fgets(temp, LEN_TEMP, fInputAccounts) != NULL) //getting the full line into temp
     {
-        for(j = 1; j <= LEN_ACCOUNTS; j++) //filling the structure members
+        for(j = 1; j <= 4; j++) //filling the structure members
         {
             ExtractString(temp, temp2, j); //getting our desired string
             if(amount_accounts <= i)
@@ -96,7 +96,7 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
 
     while(fgets(temp, LEN_TEMP, fInputTransactions) != NULL) //getting the full line into temp
     {
-        for(j = 1; j <= LEN_TRANSACTIONS; j++)
+        for(j = 1; j <= 6; j++)
         {
             ExtractString(temp, temp2, j);
             if(amount_transactions <= i)
@@ -179,15 +179,6 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
     return 0;
 }
 
-void CreateNode(void **node, char which)
-{
-    switch(which)
-    {
-        case 'a':
-            *node = (Accounts*)calloc((size_t)1, sizeof(Accounts));
-            
-    }
-}
 
 
 int ExtractString(char *input, char *output, int which)
@@ -310,26 +301,4 @@ int MemAlloc(void **data, int amount, char type)
             return 0;
     }
     return 1; 
-}
-
-void MemFree(void **data, int amount, char which)
-{
-    int i = 0;
-    switch(which)
-        case 'a':
-            for(i = 0; i < amount; i++)
-            {
-                SafeFree();
-            }
-
-    //SafeFree((void *)people);
-}
-
-void SafeFree(void **data)
-{
-    if(data != NULL && *data != NULL)
-    {
-        free(*data);
-        *data = NULL;
-    }
 }

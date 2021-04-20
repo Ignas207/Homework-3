@@ -1,7 +1,7 @@
 #ifndef GEN_H
 #define GEN_H
 
-#include <openssl/sha.h> //openssl-dev is a dependency
+#include <openssl/sha1.h> //openssl-dev is a dependency
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
