@@ -36,7 +36,7 @@ typedef struct nodeT
 
 
 void Unload(void **node, char which); //done
-void InsertNode(void **pHead, char which, char *input);
+int InsertNode(void **pHead, char which, char *input); //working on it
 void FindNodebyKey(void **node ,void *pHead, char *key, int which);
 int CreateNode(void **node, char which, char *input); //done
 

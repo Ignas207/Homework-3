@@ -180,18 +180,55 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
 }
 
 
-void InsertNode(void **pHead, char which, char *input)
+int InsertNode(void **pHead, char which, char *input)
 {
     Accounts *pHeadA = NULL;
+    Accounts *tempA = NULL;
+    Accounts *pTempAPrev = NULL;
+    Accounts *ptempA2 = NULL;
+
     Transactions *pHeadT = NULL;
+    int result = 0;
 
     switch(which)
     {
         case 'a':
             pHeadA = (Accounts*)*pHead;
-            CreateNode();
+            pTempAPrev = pHeadA;
+            ptempA2 = pTempAPrev;
+            result = CreateNode((void**)&tempA, 'a', input);
+            if(result == 0)
+            {
+                if(pHeadA != NULL)
+                {
+                    while(strcmp(ptempA2->fistName, tempA->fistName) < 0)
+                    {
+                        pTempAPrev = pHeadA;
+                        ptempA2 = ptempA2->pNext;
+                        if(ptempA2 == NULL)
+                            break;
+                    }
+                    if(pTempAPrev == ptempA2) //checking if we want to put it in front
+                    {
+                        pHeadA = tempA; 
+                        pHeadA->pNext = pTempAPrev;
+                    }
+                    else //putting things in the middle or the back
+                    {
+                        pTempAPrev->pNext = tempA;
+                        tempA->pNext = ptempA2;
+                    }
+                }
+                else
+                    pHeadA = tempA;
+            }
+            else
+                return result;
+            break;
+        case 't':
+            
     }
-
+    return 0;
 }
 
 
