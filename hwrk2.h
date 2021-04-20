@@ -37,7 +37,7 @@ typedef struct nodeT
 
 void Unload(void **node, char which);
 void FindNodebyKey(void **node ,void *pHead, char *key, int which);
-void CreateNode(void **node, char which);
+int CreateNode(void **node, char which, char *input);
 
 void RemoveNodeByKey(void **pHead, char *key, char which);
 void RemoveNodeByID(void **pHead, int id, char which);

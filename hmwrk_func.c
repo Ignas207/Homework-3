@@ -179,14 +179,166 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
     return 0;
 }
 
-void CreateNode(void **node, char which)
+
+/**
+ *  Function, that creates the node and fills it with data.
+ *  
+ *  Parameters:
+ *  1. void **node -> our node
+ *  2. char which -> what node we want to crete:
+ *      1) a -> Accounts node.
+ *      2) t -> Transactions node.
+ *  3. char *input -> full line in the CSV format.
+ * 
+ * Returns:
+ *  1. Positive integer -> exception when interpreting the CSV string, on the n-th argument.
+ *  2. Negative integer -> memory allocation failed on the (-1)*n-th argument of the CSV string.
+ *  3. 0 -> everything was read succesfully!
+ *  4. -10 -> main memory allocation error.
+ * 
+ * */
+int CreateNode(void **node, char which, char *input)
 {
+    char temp[LEN_TEMP] = {'\0'};
+    int i = 0;
+    int result = 0;
+    Accounts *tempA = NULL;
+    Transactions *tempT = NULL;
     switch(which)
     {
         case 'a':
-            *node = (Accounts*)calloc((size_t)1, sizeof(Accounts));
-            
+            if(MemAlloc(node, 1, 'a'))
+            {
+                tempA = (Accounts*)*node;
+                for(i = 1; i <= LEN_ACCOUNTS; i++)
+                {
+                    result = ExtractString(input, temp, i); //extracting the string
+                    if(result == 0)
+                    {
+                        Unload((void**)&tempA, 'a');
+                        return i; //exception occured while reading the i-th element
+                    }
+
+                    switch(i)
+                    {
+                        case 1: //firstName
+                            if(MemAlloc((void*)&tempA->fistName, (int)strlen(temp) +1, 'c'))
+                                strncpy(tempA->fistName, temp, strlen(temp));
+                            else
+                            {
+                                Unload((void**)&tempA, 'a');
+                                return i *(-1); //memory allocation error
+                            }
+                            break;
+                        
+                        case 2: //lastName
+                            if(MemAlloc((void*)&tempA->lastName, (int)strlen(temp) +1, 'c'))
+                                strncpy(tempA->lastName, temp, strlen(temp));
+                            else
+                            {
+                                Unload((void**)&tempA, 'a');
+                                return i *(-1); //memory allocation error
+                            }
+                            break;
+
+                        case 3:
+                            strncpy(tempA->accountNumber, temp, ACCOUNT_DIGEST_LEN);
+                            break;
+                        
+                        case 4:
+                            tempA->balance = (float)atof(temp);
+                            break;
+                    }
+                }
+                tempA->pNext = NULL;
+            }
+            else
+            {
+                Unload((void**)&tempA, 'a');
+                return -10; //main memory allocation error -> go to next line
+                //this is bad, but what can you do?
+            }
+            break;
+
+        case 't':
+            if(MemAlloc(node, 1, 't'))
+            {
+                tempT = (Transactions*)*node;
+                for(i = 1; i <= LEN_TRANSACTIONS; i++)
+                {
+                    result = ExtractString(input, temp, i);
+                    if(result == 0)
+                    {
+                        Unload((void**)&tempT, 't');
+                        return i; //exception occured while reading the i-th element
+                    }
+                        
+                    switch(i)
+                    {
+                        case 1:
+                            strncpy(tempT->transactionID, temp, TRANSACTION_DIGEST_LEN);
+                            break;
+
+                        case 2:
+                            strncpy(tempT->accountNumber, temp, ACCOUNT_DIGEST_LEN);
+                            break;
+                        
+                        case 3:
+                            if(MemAlloc((void*)&tempT->date, strlen(temp) +1, 'c'))
+                            {
+                                strncpy(tempT->date, temp, strlne(temp));
+                                *(tempT->date + strlen(temp) +1) = '\0';
+                            }
+                            else
+                            {
+                                Unload((void**)&tempT, 't');
+                                return i *(-1); //memory allocation error
+                            }
+                            break;
+
+                        case 4:
+                            if(MemAlloc((void*)&tempT->time, strlen(temp) +1, 'c'))
+                            {
+                                strncpy(tempT->time, temp, strlen(temp));
+                                *(tempT->time + strlen(temp) +1) = '\0';
+                            }
+                            else
+                            {
+                                Unload((void**)&tempT, 't');
+                                return i *(-1); //memory allocation error
+                            }
+                            break;
+
+                        case 5:
+                            tempT->balanceDelta = atof(temp);
+                            break;
+
+                        case 6:
+                            if(MemAlloc((void*)&tempT->description, strlen(temp) +1, 'c'))
+                            {
+                                strncpy(tempT->description, temp, strlen(temp));
+                                *(tempT->description + strlen(temp) +1) = '\0';
+                            }
+                            else
+                            {
+                                Unload((void**)&tempT, 't');
+                                return i *(-1); //memory allocation error
+                            }
+                            break;
+                    }
+                }
+                tempT->pNext = NULL;
+            }
+            else
+            {
+                Unload((void**)&tempA, 'a');
+                return -10; //main memory allocation error -> go to next line
+                //this is bad, but what can you do? I suppose you can create a new format to represent
+                //integers in another fashion, but at some point you need to calm down with the overengineering.
+            }
+            break;
     }
+    return 0; //we good I guess?
 }
 
 
@@ -223,6 +375,29 @@ int ExtractString(char *input, char *output, int which)
     }
     return 0;
 }
+
+
+//will memclear the node
+void Unload(void **node, char which)
+{
+    switch(which)
+    {
+        case 'a':
+            Accounts *tempA = (Accounts*)*node;
+            SafeFree((void*)&tempA->fistName);
+            SafeFree((void*)&tempA->lastName);
+            SafeFree((void**)&tempA);
+            break;
+        case 't':
+            Transactions *tempT = (Transactions*)*node;
+            SafeFree((void*)&tempT->date);
+            SafeFree((void*)&tempT->time);
+            SafeFree((void*)&tempT->description);
+            SafeFree((void**)&tempT);
+            break;
+    }
+}
+
 
 /**
  *  Description:    Will allocate or realocate the memory of **data.
@@ -312,6 +487,7 @@ int MemAlloc(void **data, int amount, char type)
     return 1; 
 }
 
+
 void MemFree(void **data, int amount, char which)
 {
     int i = 0;
@@ -319,11 +495,12 @@ void MemFree(void **data, int amount, char which)
         case 'a':
             for(i = 0; i < amount; i++)
             {
-                SafeFree();
+               // SafeFree();
             }
 
     //SafeFree((void *)people);
 }
+
 
 void SafeFree(void **data)
 {
