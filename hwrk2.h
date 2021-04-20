@@ -35,17 +35,18 @@ typedef struct nodeT
 } Transactions;
 
 
-void Unload(void **node, char which);
+void Unload(void **node, char which); //done
+void InsertNode(void **pHead, char which, char *input);
 void FindNodebyKey(void **node ,void *pHead, char *key, int which);
-int CreateNode(void **node, char which, char *input);
+int CreateNode(void **node, char which, char *input); //done
 
 void RemoveNodeByKey(void **pHead, char *key, char which);
 void RemoveNodeByID(void **pHead, int id, char which);
 
 int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions);
-int MemAlloc(void **data, int amount, char type);
-int ExtractString(char *input, char *output, int which);
-void SafeFree(void **data);
-void MemFree(void **data, int amount, char which);
+int MemAlloc(void **data, int amount, char type); //done
+int ExtractString(char *input, char *output, int which); //done
+void SafeFree(void **data); //done
+void MemFree(void **data, int amount, char which); //will need an update
 
 #endif

@@ -180,6 +180,21 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
 }
 
 
+void InsertNode(void **pHead, char which, char *input)
+{
+    Accounts *pHeadA = NULL;
+    Transactions *pHeadT = NULL;
+
+    switch(which)
+    {
+        case 'a':
+            pHeadA = (Accounts*)*pHead;
+            CreateNode();
+    }
+
+}
+
+
 /**
  *  Function, that creates the node and fills it with data.
  *  
