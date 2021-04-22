@@ -572,7 +572,7 @@ void MemFree(void **data, char which)
             while((void*)A != NULL)
             {
                 temp = (void*)A->pNext;
-                Unload((void*)A, 'a');
+                Unload((void**)&A, 'a');
                 A = (Accounts*)temp;
             }
             break;
@@ -582,7 +582,7 @@ void MemFree(void **data, char which)
             while((void*)T != NULL)
             {
                 temp = (void*)T->pNext;
-                Unload((void*)T, 't');
+                Unload((void**)&T, 't');
                 T = (Transactions*)temp;
             }
             break;

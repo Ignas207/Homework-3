@@ -7,7 +7,7 @@ int main(void)
     Accounts *A = NULL;
     Transactions *T = NULL;
     Reading(&A, &T, FILE_INPUT_ACCOUNT, FILE_INPUT_TRANSACTIONS);
-    MemFree((void*)&A, 'a');
-    MemFree((void*)&T, 't');
+    MemFree((void**)&A, 'a');
+    MemFree((void**)&T, 't');
     return 0;
 }
