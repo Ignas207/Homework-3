@@ -41,18 +41,24 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
         }
         i++;
     }
-    PrintList((void**)A, 'a');
+    PrintList((void*)*A, 'a');
     amount_accounts = i;
     i = 0;
     fclose(fInputAccounts);
 
-    /*
+    
     while(fgets(temp, LEN_TEMP, fInputTransactions) != NULL) //getting the full line into temp
     {
         result = InsertNode((void**)T, 't', temp);
+        if(result != 0)
+        {
+            ReadError(result, i+1, LEN_TRANSACTIONS);
+            continue;
+        }
         i++;
     }
-    */
+    PrintList((void*)*T, 't');
+
     amount_transactions = i;
     fclose(fInputTransactions);
     return 0;
@@ -196,6 +202,7 @@ int InsertNode(void **pHead, char which, char *input)
             }
             else
                 return result;
+            *pHead = (void*)pHeadT;
             break;
     }
     return 0;
@@ -541,16 +548,13 @@ int MemAlloc(void **data, int amount, char type)
 }
 
 
-void MemFree(void **data, int amount, char which)
+void MemFree(void **data, char which)
 {
     int i = 0;
     switch(which)
     {
         case 'a':
-            for(i = 0; i < amount; i++)
-            {
-               // SafeFree();
-            }
+            
             break;
     }
 

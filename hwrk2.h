@@ -34,15 +34,15 @@ typedef struct nodeT
     struct nodeT *pNext;
 } Transactions;
 
-void ReadError(int condintion, int line, int amount);
+void ReadError(int condintion, int line, int amount); //done?
 
-void PrintNode(void *node, char which);
-void PrintList(void *node, char which);
+void PrintNode(void *node, char which); //done
+void PrintList(void *node, char which); //done
 
-void Unload(void **node, char which); //done (unchecked)
-int InsertNode(void **pHead, char which, char *input); //working on it
+void Unload(void **node, char which); //done
+int InsertNode(void **pHead, char which, char *input); //done
 void FindNodebyKey(void **node ,void *pHead, char *key, int which);
-int CreateNode(void **node, char which, char *input); //done (unchecked)
+int CreateNode(void **node, char which, char *input); //done
 
 void RemoveNodeByKey(void **pHead, char *key, char which);
 void RemoveNodeByID(void **pHead, int id, char which);
@@ -51,6 +51,6 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
 int MemAlloc(void **data, int amount, char type); //done
 int ExtractString(char *input, char *output, int which); //done
 void SafeFree(void **data); //done
-void MemFree(void **data, int amount, char which); //will need an update
+void MemFree(void **data, char which); //will need an update
 
 #endif
