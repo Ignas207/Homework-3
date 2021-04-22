@@ -548,17 +548,45 @@ int MemAlloc(void **data, int amount, char type)
 }
 
 
+/**
+ * Function, that will free the entire node.
+ * 
+ * Parameters:
+ *      1. void **data -> our heder for the node we want to clear.
+ *      2. char which -> character, telling which node we supplied:
+ *          1) a -> Accounts node
+ *          2) t -> Transactions node
+ * 
+ * Returns: nothing.
+ **/
 void MemFree(void **data, char which)
 {
+    Accounts *A = NULL;
+    Transactions *T = NULL;
+    void *temp = NULL;
     int i = 0;
     switch(which)
     {
         case 'a':
-            
+            A = (Accounts*)*data;
+            while((void*)A != NULL)
+            {
+                temp = (void*)A->pNext;
+                Unload((void*)A, 'a');
+                A = (Accounts*)temp;
+            }
+            break;
+
+        case 't':
+            T = (Transactions*)*data;
+            while((void*)T != NULL)
+            {
+                temp = (void*)T->pNext;
+                Unload((void*)T, 't');
+                T = (Transactions*)temp;
+            }
             break;
     }
-
-    //SafeFree((void *)people);
 }
 
 
