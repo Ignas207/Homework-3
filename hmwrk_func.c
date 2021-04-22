@@ -314,10 +314,7 @@ int CreateNode(void **node, char which, char *input)
                         
                         case 3:
                             if(MemAlloc((void*)&tempT->date, (int)strlen(temp) +1, 'c'))
-                            {
                                 strncpy(tempT->date, temp, (size_t)strlen(temp));
-                                *(tempT->date + strlen(temp) +1) = '\0';
-                            }
                             else
                             {
                                 Unload((void**)&tempT, 't');
@@ -327,10 +324,7 @@ int CreateNode(void **node, char which, char *input)
 
                         case 4:
                             if(MemAlloc((void*)&tempT->time, (int)strlen(temp) +1, 'c'))
-                            {
                                 strncpy(tempT->time, temp, strlen(temp));
-                                *(tempT->time + strlen(temp) +1) = '\0';
-                            }
                             else
                             {
                                 Unload((void**)&tempT, 't');
@@ -344,10 +338,7 @@ int CreateNode(void **node, char which, char *input)
 
                         case 6:
                             if(MemAlloc((void*)&tempT->description, (int)strlen(temp) +1, 'c'))
-                            {
                                 strncpy(tempT->description, temp, strlen(temp));
-                                *(tempT->description + strlen(temp) +1) = '\0';
-                            }
                             else
                             {
                                 Unload((void**)&tempT, 't');
@@ -360,7 +351,7 @@ int CreateNode(void **node, char which, char *input)
             }
             else
             {
-                Unload((void**)&tempA, 'a');
+                Unload((void**)&tempT, 't');
                 return -10; //main memory allocation error -> go to next line
                 //this is bad, but what can you do? I suppose you can create a new format to represent
                 //integers in another fashion, but at some point you need to calm down with the overengineering.
