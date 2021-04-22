@@ -4,9 +4,8 @@
 int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions)
 {
     char temp[LEN_TEMP];
-    char temp2[LEN_TEMP];
     int i = 0;
-    int j = 0;
+    int result = 0;
 
     int amount_accounts = 0;
     int amount_transactions = 0;
@@ -34,149 +33,98 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
 
     while(fgets(temp, LEN_TEMP, fInputAccounts) != NULL) //getting the full line into temp
     {
-        for(j = 1; j <= LEN_ACCOUNTS; j++) //filling the structure members
+        result = InsertNode((void**)A, 'a', temp);
+        if(result != 0)
         {
-            ExtractString(temp, temp2, j); //getting our desired string
-            if(amount_accounts <= i)
-            {
-                if(MemAlloc((void *)A, 2*(1+i), 'a')) //alocating memory for structure
-                    amount_accounts = 2*(1 + i);
-                else
-                {
-                    printf("Error occoured when allocating memory!\n");
-                    printf("Will skip the line %d!\n", i);
-                    j = 4;
-                    i--;
-                    break;
-                }
-            }
-
-            //change this to something better, like idk, a function?
-            switch(j)
-            {
-                case 1:
-                    if(MemAlloc((void *)&(*A +i)->fistName, (int)strlen(temp2) +1, 'c')) //alocating memory for string
-                        strncpy((*A + i)->fistName, temp2, strlen(temp2)); //if any of these is empty, there was a problem
-                    else
-                    {
-                        printf("Error occoured when allocating memory!\n");
-                        printf("Will skip the line %d!\n", i+1);
-                        j = 4;
-                        i--;
-                        break;
-                    }
-                    break;
-                case 2:
-                    if(MemAlloc((void *)&(*A +i)->lastName, (int)strlen(temp2) +1, 'c')) //alocating memory for string
-                        strncpy((*A + i)->lastName, temp2, strlen(temp2));
-                    else
-                    {
-                        printf("Error occoured when allocating memory!\n");
-                        printf("Will skip the line %d!\n", i+1);
-                        j = 4;
-                        i--;
-                        break;
-                    }
-                    break;
-                case 3:
-                    strncpy((*A + i)->accountNumber, temp2, ACCOUNT_DIGEST_LEN);
-                    break;
-                case 4:
-                    (*A + i)->balance = (float)atof(temp2);
-                    break;
-            }
+            ReadError(result, i+1, LEN_ACCOUNTS);
+            continue;
         }
-        printf("%s %s %s %.2f\n", (*A + i)->fistName, (*A + i)->lastName, (*A + i)->accountNumber, (*A + i)->balance);
         i++;
     }
-    MemAlloc((void *)A, i, 'a');
+    PrintList((void**)A, 'a');
     amount_accounts = i;
     i = 0;
     fclose(fInputAccounts);
 
+    /*
     while(fgets(temp, LEN_TEMP, fInputTransactions) != NULL) //getting the full line into temp
     {
-        for(j = 1; j <= LEN_TRANSACTIONS; j++)
-        {
-            ExtractString(temp, temp2, j);
-            if(amount_transactions <= i)
-            {
-                if(MemAlloc((void*)T, 2* (i + 1), 't'))
-                    amount_transactions = 2* (i + 1);
-                else
-                {
-                    printf("Error occoured when allocating memory!\n");
-                    printf("Will skip the line %d!\n", i);
-                    j = 6;
-                    i--;
-                    break;
-                }
-            }
-            switch(j)
-            {
-                case 1:
-                    strncpy((*T + i)->transactionID, temp2, TRANSACTION_DIGEST_LEN);
-                    break;
-                case 2:
-                    strncpy((*T + i)->accountNumber, temp2, ACCOUNT_DIGEST_LEN);
-                    break;
-                case 3:
-                    if(MemAlloc((void*)&(*T + i)->date, strlen(temp2) +1, 'c'))
-                    {
-                        strncpy((*T + i)->date, temp2, strlen(temp2));
-                        *((*T + i)->date + strlen(temp2) +1) = '\0';
-                    }
-                    else
-                    {
-                        printf("Error occoured when allocating memory!\n");
-                        printf("Will skip the line %d!\n", i);
-                        j = 6;
-                        i--;
-                        break;
-                    }
-                    break;
-                case 4:
-                    if(MemAlloc((void*)&(*T + i)->time, strlen(temp2) +1, 'c'))
-                    {
-                        strncpy((*T + i)->time, temp2, strlen(temp2));
-                        *((*T + i)->time + strlen(temp2) +1) = '\0';
-                    }
-                    else
-                    {
-                        printf("Error occoured when allocating memory!\n");
-                        printf("Will skip the line %d!\n", i);
-                        j = 6;
-                        i--;
-                        break;
-                    }
-                    break;
-                case 5:
-                    (*T + i)->balanceDelta = atof(temp2);
-                    break;
-                case 6:
-                    if(MemAlloc((void*)&(*T + i)->description, strlen(temp2) +1, 'c'))
-                    {
-                        strncpy((*T + i)->description, temp2, strlen(temp2));
-                        *((*T + i)->description + strlen(temp2) +1) = '\0';
-                    }
-                    else
-                    {
-                        printf("Error occoured when allocating memory!\n");
-                        printf("Will skip the line %d!\n", i);
-                        j = 6;
-                        i--;
-                        break;
-                    }
-                    break;          
-            }
-        }
-        printf("%s %s %s %s %.2f %s\n", (*T + i)->transactionID, (*T + i)->accountNumber, (*T + i)->date, (*T + i)->time, (*T + i)->balanceDelta, (*T + i)->description);
+        result = InsertNode((void**)T, 't', temp);
         i++;
     }
-    MemAlloc((void*)T, i, 't');
+    */
     amount_transactions = i;
     fclose(fInputTransactions);
     return 0;
+}
+
+
+void PrintList(void *node, char which)
+{
+    Accounts *A = NULL;
+    Transactions *T = NULL;
+    switch(which)
+    {
+        case 'a':
+            A = (Accounts*)node;
+            while((void*)A != NULL)
+            {
+                PrintNode((void*)A, 'a');
+                A = A->pNext;
+            }
+            break;
+        
+        case 't':
+            T = (Transactions*)node;
+            while((void*)T != NULL)
+            {
+                PrintNode((void*)T, 't');
+                T = T->pNext;
+            }
+            break;
+    }
+}
+
+
+void PrintNode(void *node, char which)
+{
+    Accounts *A = NULL;
+    Transactions *T = NULL;
+
+    switch(which)
+    {
+        case 'a':
+            A = (Accounts*)node;
+            if(A == NULL)
+            {
+                printf("Node is NULL!\n");
+                return;
+            }
+            printf("\nNode %p:\n", (void*)A);
+            printf("    firstName: %s\n", A->fistName);
+            printf("    lastName: %s\n", A->lastName);
+            printf("    balance: %.2f\n", A->balance);
+            printf("    accountNumber: %s\n", A->accountNumber);
+            printf("    pNext: %p\n", A->pNext);
+            break;
+
+        case 't':
+            T = (Transactions*)node;
+            if(T == NULL)
+            {
+                printf("Node is NULL!\n");
+                return;
+            }
+            printf("\nNode %p:\n", (void*)T);
+            printf("    transactionID: %s\n", T->transactionID);
+            printf("    accountNumber: %s\n", T->accountNumber);
+            printf("    date: %s\n", T->date);
+            printf("    time: %s\n", T->time);
+            printf("    description: %s\n", T->description);
+            printf("    balanceDelta: %.2f\n", T->balanceDelta);
+            printf("    pNext: %p\n", T->pNext);
+            break;
+    }
 }
 
 
@@ -188,6 +136,8 @@ int InsertNode(void **pHead, char which, char *input)
     Accounts *ptempA2 = NULL;
 
     Transactions *pHeadT = NULL;
+    Transactions *tempT = NULL;
+    Transactions *pTempT2 = NULL;
     int result = 0;
 
     switch(which)
@@ -199,11 +149,11 @@ int InsertNode(void **pHead, char which, char *input)
             result = CreateNode((void**)&tempA, 'a', input);
             if(result == 0)
             {
-                if(pHeadA != NULL)
+                if((void*)(ptempA2) != NULL)
                 {
                     while(strcmp(ptempA2->fistName, tempA->fistName) < 0)
                     {
-                        pTempAPrev = pHeadA;
+                        pTempAPrev = ptempA2;
                         ptempA2 = ptempA2->pNext;
                         if(ptempA2 == NULL)
                             break;
@@ -224,9 +174,29 @@ int InsertNode(void **pHead, char which, char *input)
             }
             else
                 return result;
+            *pHead = (void*)pHeadA;
             break;
+
         case 't':
-            
+            pHeadT = (Transactions*)*pHead;
+            pTempT2 = pHeadT;
+            result = CreateNode((void**)&tempT, 't', input);
+            if(result == 0)
+            {
+                if(pTempT2 != NULL)
+                {
+                    while(pTempT2->pNext != NULL)
+                        pTempT2 = pTempT2->pNext;
+
+                    pTempT2->pNext = tempT;
+                    tempT->pNext = NULL;
+                }
+                else
+                    pHeadT = tempT;
+            }
+            else
+                return result;
+            break;
     }
     return 0;
 }
@@ -293,11 +263,11 @@ int CreateNode(void **node, char which, char *input)
                             }
                             break;
 
-                        case 3:
+                        case 3: //accountNumber
                             strncpy(tempA->accountNumber, temp, ACCOUNT_DIGEST_LEN);
                             break;
                         
-                        case 4:
+                        case 4: //balance
                             tempA->balance = (float)atof(temp);
                             break;
                     }
@@ -336,9 +306,9 @@ int CreateNode(void **node, char which, char *input)
                             break;
                         
                         case 3:
-                            if(MemAlloc((void*)&tempT->date, strlen(temp) +1, 'c'))
+                            if(MemAlloc((void*)&tempT->date, (int)strlen(temp) +1, 'c'))
                             {
-                                strncpy(tempT->date, temp, strlne(temp));
+                                strncpy(tempT->date, temp, (size_t)strlen(temp));
                                 *(tempT->date + strlen(temp) +1) = '\0';
                             }
                             else
@@ -349,7 +319,7 @@ int CreateNode(void **node, char which, char *input)
                             break;
 
                         case 4:
-                            if(MemAlloc((void*)&tempT->time, strlen(temp) +1, 'c'))
+                            if(MemAlloc((void*)&tempT->time, (int)strlen(temp) +1, 'c'))
                             {
                                 strncpy(tempT->time, temp, strlen(temp));
                                 *(tempT->time + strlen(temp) +1) = '\0';
@@ -362,11 +332,11 @@ int CreateNode(void **node, char which, char *input)
                             break;
 
                         case 5:
-                            tempT->balanceDelta = atof(temp);
+                            tempT->balanceDelta = (float)atof(temp);
                             break;
 
                         case 6:
-                            if(MemAlloc((void*)&tempT->description, strlen(temp) +1, 'c'))
+                            if(MemAlloc((void*)&tempT->description, (int)strlen(temp) +1, 'c'))
                             {
                                 strncpy(tempT->description, temp, strlen(temp));
                                 *(tempT->description + strlen(temp) +1) = '\0';
@@ -394,6 +364,19 @@ int CreateNode(void **node, char which, char *input)
 }
 
 
+/**
+ * Function, that will extract the wanted string out of a CSV formated sting.
+ * 
+ * Parameters:
+ *      1. char *input -> our CSV formated string.
+ *      2. char *output -> our wanted extracted string.
+ *      3. int which -> tells the function, which string we want to extract.
+ * 
+ * Returns:
+ *      1. 1 -> extraction was succesfull.
+ *      2. 0 -> extraction failled. 
+ * 
+ **/
 int ExtractString(char *input, char *output, int which)
 {
     int i = 0;
@@ -420,28 +403,46 @@ int ExtractString(char *input, char *output, int which)
                     countingChar++;
                 }
                 *(output + countingChar) = '\0';
-                return 1;
+                return 1; //we are good
             }
             start = i;
         }
     }
-    return 0;
+    return 0; //we are bad
+}
+
+void ReadError(int condintion, int line, int amount)
+{
+    
+    if(condintion > 0)
+    {
+        printf("Exception occured when reading %d line:\n", line);
+        printf("    Was expecting %d arguments, but got %d!\n", amount, condintion);
+    }
+    else if(condintion < 0)
+    {
+        printf("Exception occured when reading %d line:\n", line);
+        printf("    Memory allocation failed for the %d element!\n", condintion*(-1));
+    }
+    
 }
 
 
 //will memclear the node
 void Unload(void **node, char which)
 {
+    Accounts *tempA = NULL;
+    Transactions *tempT = NULL;
     switch(which)
     {
         case 'a':
-            Accounts *tempA = (Accounts*)*node;
+            tempA = (Accounts*)*node;
             SafeFree((void*)&tempA->fistName);
             SafeFree((void*)&tempA->lastName);
             SafeFree((void**)&tempA);
             break;
         case 't':
-            Transactions *tempT = (Transactions*)*node;
+            tempT = (Transactions*)*node;
             SafeFree((void*)&tempT->date);
             SafeFree((void*)&tempT->time);
             SafeFree((void*)&tempT->description);
@@ -544,11 +545,14 @@ void MemFree(void **data, int amount, char which)
 {
     int i = 0;
     switch(which)
+    {
         case 'a':
             for(i = 0; i < amount; i++)
             {
                // SafeFree();
             }
+            break;
+    }
 
     //SafeFree((void *)people);
 }

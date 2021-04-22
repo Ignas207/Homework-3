@@ -34,11 +34,15 @@ typedef struct nodeT
     struct nodeT *pNext;
 } Transactions;
 
+void ReadError(int condintion, int line, int amount);
 
-void Unload(void **node, char which); //done
+void PrintNode(void *node, char which);
+void PrintList(void *node, char which);
+
+void Unload(void **node, char which); //done (unchecked)
 int InsertNode(void **pHead, char which, char *input); //working on it
 void FindNodebyKey(void **node ,void *pHead, char *key, int which);
-int CreateNode(void **node, char which, char *input); //done
+int CreateNode(void **node, char which, char *input); //done (unchecked)
 
 void RemoveNodeByKey(void **pHead, char *key, char which);
 void RemoveNodeByID(void **pHead, int id, char which);
