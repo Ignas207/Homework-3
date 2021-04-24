@@ -6,7 +6,7 @@
 
 #define ACCOUNT_DIGEST_LEN 20
 #define TRANSACTION_DIGEST_LEN 42
-#define LEN_TEMP 200
+#define LEN_TEMP 300
 
 #define ESC 27
 
@@ -36,6 +36,7 @@ typedef struct nodeT
     struct nodeT *pNext;
 } Transactions;
 
+int SearchMenu(void);
 void Menu(Accounts **A, Transactions **T, int amountA, int amountT); //working on it
 
 void ReadError(int condintion, int line, int amount); //done?
@@ -45,7 +46,7 @@ void PrintList(Accounts *A, Transactions *T, char which); //done
 
 void Unload(void **node, char which); //done
 int InsertNode(void **pHead, char which, char *input); //done
-int FindNodebyKey(void **node, void *result, char *key, char which, int position);
+int FindNodebyKey(void **node, void **result, char *key, char which, int position, int skip, int type);
 int CreateNode(void **node, char which, char *input); //done
 
 void RemoveNodeByKey(void **pHead, char *key, char which);
