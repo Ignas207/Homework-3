@@ -8,6 +8,8 @@
 #define TRANSACTION_DIGEST_LEN 42
 #define LEN_TEMP 200
 
+#define ESC 27
+
 #define LEN_TRANSACTIONS 6
 #define LEN_ACCOUNTS 4
 
@@ -34,23 +36,25 @@ typedef struct nodeT
     struct nodeT *pNext;
 } Transactions;
 
+void Menu(Accounts **A, Transactions **T, int amountA, int amountT); //working on it
+
 void ReadError(int condintion, int line, int amount); //done?
 
 void PrintNode(void *node, char which); //done
-void PrintList(void *node, char which); //done
+void PrintList(Accounts *A, Transactions *T, char which); //done
 
 void Unload(void **node, char which); //done
 int InsertNode(void **pHead, char which, char *input); //done
-void FindNodebyKey(void **node ,void *pHead, char *key, int which);
+int FindNodebyKey(void **node, void *result, char *key, char which, int position);
 int CreateNode(void **node, char which, char *input); //done
 
 void RemoveNodeByKey(void **pHead, char *key, char which);
 void RemoveNodeByID(void **pHead, int id, char which);
 
-int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions);
+int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions, int *amountA, int *amountT); //done
 int MemAlloc(void **data, int amount, char type); //done
 int ExtractString(char *input, char *output, int which); //done
 void SafeFree(void **data); //done
-void MemFree(void **data, char which); //will need an update
+void MemFree(void **data, char which); //done
 
 #endif

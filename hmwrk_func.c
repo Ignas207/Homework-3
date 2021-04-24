@@ -1,14 +1,50 @@
 #include <stdio.h>
 #include "hwrk2.h"
 
-int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions)
+
+void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
+{
+    int choice = -1;
+    Accounts *tempA = *A;
+    Transactions *tempT = *T;
+    printf("Welcome to the program!\n\n");
+    printf("If you are unsure what options are available, type '1'!\n");
+    while(1)
+    {
+        printf("> ");
+        scanf("%d", &choice);
+        switch(choice)
+        {
+            case 1:
+                printf("\nAvailable commands:\n");
+                printf("    1 -> Display this help message\n");
+                printf("    2 -> Display all of the read results\n");
+                printf("    3 -> Display a speciffic account name\n");
+                printf("    4 -> Edit a speciffic account\n");
+                printf("    0 -> Exit the program\n\n");
+                break;
+
+            case 2:
+                printf("\nSelected: Display all of the read results\n\n");
+                PrintList(*A, *T, 'a');
+                break;
+            case 0:
+                printf("\nExiting the program...\n");
+                return;
+            default:
+                printf("\nChoice %d is not valid!\n", choice);
+                printf("Please enter a different choice!\n");
+                break;
+        }
+    }
+}
+
+
+int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions, int *amountA, int *amountT)
 {
     char temp[LEN_TEMP];
     int i = 0;
     int result = 0;
-
-    int amount_accounts = 0;
-    int amount_transactions = 0;
 
     FILE *fInputAccounts = NULL;
     FILE *fInputTransactions = NULL;
@@ -41,8 +77,8 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
         }
         i++;
     }
-    PrintList((void*)*A, 'a');
-    amount_accounts = i;
+    //PrintList((void*)*A, 'a');
+    *amountA = i;
     i = 0;
     fclose(fInputAccounts);
 
@@ -57,18 +93,82 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
         }
         i++;
     }
-    PrintList((void*)*T, 't');
+    //PrintList((void*)*T, 't');
 
-    amount_transactions = i;
+    *amountT = i;
     fclose(fInputTransactions);
     return 0;
 }
 
 
-void PrintList(void *node, char which)
+int FindNodebyKey(void **node, void *result, char *key, char which, int position)
 {
-    Accounts *A = NULL;
     Transactions *T = NULL;
+    Accounts *A = NULL;
+    int counter = 0;
+    switch(which)
+    {
+        case 'a':
+            A = (Accounts*)*node;
+            while(A != NULL)
+            {
+                if(strcmp(A->accountNumber, key) == 0)
+                    counter++;
+                if(counter == position)
+                {
+                    result = (void*)A;
+                    return 1;
+                }
+                A = A->pNext;
+            }
+            break;
+ 
+        case 't':
+            T = (Transactions*)*node;
+            while(T != NULL)
+            {
+                if(strcmp(T->accountNumber, key) == 0)
+                    counter++;
+                if(counter == position)
+                {
+                    result = (void*)T;
+                    return 1;
+                }
+            }
+            break;
+    }
+    return 0;
+}
+
+
+void PrintList(Accounts *A, Transactions *T, char which)
+{
+    Transactions *tempT2 = NULL;
+    Transactions *tempT = T;
+    int i = 1;
+    
+    while((void*)A != NULL)
+    {
+        printf("Name: %s %s\n", A->fistName, A->lastName);
+        printf("Account balance: %.2f\n", A->balance);
+        printf("Account number: %c[1m%s%c[0m\n", ESC, A->accountNumber, ESC);
+        while((void*)tempT != NULL)
+        {
+            if(FindNodebyKey((void*)&tempT, (void*)tempT2, A->accountNumber, 't', i))
+            {
+                printf("    Account number:  %c[1m%s%c[0m\n", ESC, tempT2->accountNumber, ESC);
+                printf("    Transaction ID: %s\n", tempT2->transactionID);
+                printf("    Date: %s\n", tempT2->date);
+                printf("    Time: %s\n", tempT2->time);
+                printf("    Balance change: %.2f\n", tempT2->balanceDelta);
+                printf("    Description: %s\n\n", tempT2->description);
+                i++;
+            }
+            tempT = tempT->pNext;
+        }
+        A = A->pNext;
+    }
+    /*
     switch(which)
     {
         case 'a':
@@ -89,6 +189,7 @@ void PrintList(void *node, char which)
             }
             break;
     }
+    */
 }
 
 
@@ -141,6 +242,7 @@ int InsertNode(void **pHead, char which, char *input)
     Accounts *pTempAPrev = NULL;
     Accounts *ptempA2 = NULL;
 
+    Transactions *ptempTPrev = NULL;
     Transactions *pHeadT = NULL;
     Transactions *tempT = NULL;
     Transactions *pTempT2 = NULL;
@@ -185,17 +287,30 @@ int InsertNode(void **pHead, char which, char *input)
 
         case 't':
             pHeadT = (Transactions*)*pHead;
+            ptempTPrev = pHeadT;
             pTempT2 = pHeadT;
             result = CreateNode((void**)&tempT, 't', input);
             if(result == 0)
             {
-                if(pTempT2 != NULL)
+                if(pTempT2 != NULL) //this will have to be ordered by the balanceDelta!
                 {
-                    while(pTempT2->pNext != NULL)
+                    while(pTempT2->balanceDelta > tempT->balanceDelta)
+                    {   
+                        ptempTPrev = pTempT2;
                         pTempT2 = pTempT2->pNext;
-
-                    pTempT2->pNext = tempT;
-                    tempT->pNext = NULL;
+                        if(pTempT2 == NULL)
+                            break;
+                    }
+                    if(ptempTPrev == pTempT2)
+                    {
+                        pHeadT = tempT;
+                        pHeadT->pNext = ptempTPrev;
+                    }
+                    else
+                    {
+                        ptempTPrev->pNext = tempT;
+                        tempT->pNext = pTempT2;
+                    }
                 }
                 else
                     pHeadT = tempT;
@@ -353,7 +468,7 @@ int CreateNode(void **node, char which, char *input)
             {
                 Unload((void**)&tempT, 't');
                 return -10; //main memory allocation error -> go to next line
-                //this is bad, but what can you do? I suppose you can create a new format to represent
+                //this is not ideal, but what can you do? I suppose you can create a new format to represent
                 //integers in another fashion, but at some point you need to calm down with the overengineering.
             }
             break;
@@ -409,9 +524,9 @@ int ExtractString(char *input, char *output, int which)
     return 0; //we are bad
 }
 
+
 void ReadError(int condintion, int line, int amount)
 {
-    
     if(condintion > 0)
     {
         printf("Exception occured when reading %d line:\n", line);
@@ -422,7 +537,6 @@ void ReadError(int condintion, int line, int amount)
         printf("Exception occured when reading %d line:\n", line);
         printf("    Memory allocation failed for the %d element!\n", condintion*(-1));
     }
-    
 }
 
 
@@ -445,6 +559,8 @@ void Unload(void **node, char which)
             SafeFree((void*)&tempT->time);
             SafeFree((void*)&tempT->description);
             SafeFree((void**)&tempT);
+            break;
+        default:
             break;
     }
 }
