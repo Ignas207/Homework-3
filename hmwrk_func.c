@@ -5,6 +5,7 @@
 void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
 {
     int choice = -1;
+    int temp = 0;
     Accounts *tempA = *A;
     Transactions *tempT = *T;
     printf("Welcome to the program!\n\n");
@@ -30,6 +31,7 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
                 break;
             case 3:
                 printf("\nSelected: Display a speciffic account\n\n");
+                //temp = SearchMenu();
                 break;
             case 0:
                 printf("\nExiting the program...\n");
@@ -43,7 +45,52 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
 }
 
 
-int SearchMenu(void)
+void Searching(void **node, char which)
+{
+    int i = 0;
+    int counting = 1;
+    Accounts **tempA = NULL;
+    Transactions **tempT = NULL;
+    Accounts *A = NULL;
+    Transactions *T = NULL;
+    char key[LEN_TEMP] = {'\0'};
+    int pos = 0;
+    int posT = 0;
+    int type = SearchMenu(key);
+
+    if(type == 1 || type == 2 || type == 4)
+    {
+        A = (Accounts*)*node;
+        while((void*)A != NULL)
+        {
+            posT = FindNodebyKey(node, (void**)(*tempA + i), key, 'a', counting, pos, type);
+            if(posT != 0)
+            {
+                pos = posT;
+                i++;
+            }
+            A = A->pNext;
+        }
+    } //fix this
+    else if(type == 3 || type == 4 || type == 5)
+    {
+        T = (Transactions*)*node;
+        while((void*)T != NULL)
+        {
+            posT = FindNodebyKey(node, (void**)(*tempT + i), key, 't', counting, pos, type);
+            if(posT != 0)
+            {
+                pos = posT;
+                i++;
+            }
+            T = T->pNext;
+        }
+    }
+    
+}
+
+
+int SearchMenu(char *search)
 {
     int selection = 0;
     while(1)
@@ -57,7 +104,12 @@ int SearchMenu(void)
         printf("Insert your selection: > ");
         scanf("%d", &selection);
         if(selection > 0 && selection < 5)
+        {
+            printf("Insert the search term: > ");
+            scanf("%s", search);
             return selection;
+        }
+            
         else
         {
             printf("Choice %d is invalid!\n", selection);
@@ -172,15 +224,15 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
                 switch(type)
                 {
                     case 1:
-                        if(strcmp(A->fistName, key) == 0) //firstName comparison
+                        if(strncmp(A->fistName, key, strlen(key)) == 0) //firstName comparison
                         counter++;
                         break;
                     case 2:
-                        if(strcmp(A->lastName, key) == 0) //lastName comparison
+                        if(strncmp(A->lastName, key, strlen(key)) == 0) //lastName comparison
                         counter++;
                         break;
                     case 4:
-                        if(strcmp(A->accountNumber, key) == 0) //accountNumber comparison
+                        if(strncmp(A->accountNumber, key, strlen(key)) == 0) //accountNumber comparison
                         counter++;
                         break;
                     default:
@@ -201,23 +253,23 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
             while(T != NULL)
             {
                 counter_position++; //we do this so we keep track where we are
-                if(skip != 0 && counter_position < skip)
-                {
+                if(skip != 0 && counter_position < skip)    //on the next iteration we can start from the elements,
+                {                                           //that we have already checked
                     T = T->pNext;
                     continue;
                 }
                 switch(type)
                 {
                     case 3:
-                        if(strcmp(T->date, key) == 0) //date comparison
+                        if(strncmp(T->date, key, strlen(key)) == 0) //date comparison
                         counter++;
                         break;
                     case 4:
-                        if(strcmp(T->accountNumber, key) == 0) //accountNumber comparison
+                        if(strncmp(T->accountNumber, key, strlen(key)) == 0) //accountNumber comparison
                         counter++;
                         break;
                     case 5:
-                        if(strcmp(T->description, key) == 0) //description comparison
+                        if(strncmp(T->description, key, strlen(key)) == 0) //description comparison
                         counter++;
                         break;
                     default:
@@ -257,6 +309,7 @@ void PrintList(Accounts *A, Transactions *T, char which)
             temp_pos = FindNodebyKey((void*)&T, (void**)&tempT2, A->accountNumber, 't', i, counting_position, 4);
             if(temp_pos != 0)
             {
+                //https://www.unix.com/programming/21073-bold-text.html
                 counting_position = temp_pos; //saving the postion, so the next time we search we save time!
                 printf("    Account number:  %c[1m%s%c[0m\n", ESC, tempT2->accountNumber, ESC);
                 printf("    Transaction ID: %s\n", tempT2->transactionID);
