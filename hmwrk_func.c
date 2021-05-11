@@ -24,7 +24,6 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
                 printf("    4 -> Edit a speciffic account\n");
                 printf("    0 -> Exit the program\n\n");
                 break;
-
             case 2:
                 printf("\nSelected: Display all of the read results\n\n");
                 PrintList(*A, *T, 'a');
@@ -86,7 +85,6 @@ void Searching(void **node, char which)
             T = T->pNext;
         }
     }
-    
 }
 
 
@@ -723,6 +721,7 @@ void Unload(void **node, char which)
 
 /**
  *  Description:    Will allocate or realocate the memory of **data.
+ *                  In the case of realocation, the data is initialized*.
  *
  *  Parameters:     void **data -> where to allocate the memory.
  *                  int amount -> how much memory we would like to allocate.
@@ -763,10 +762,10 @@ int MemAlloc(void **data, int amount, char type)
                 *data = (char *)calloc((size_t)amount, sizeof(char));
             else
             {
-                //sizeInitial = sizeof(char) * strlen((char*)*data); //fix this
+                sizeInitial = sizeof(char) * strlen((char*)*data); //finding the size of the previous string
                 sizeAfter = sizeof(char) * (size_t)amount;
                 temp = (char *)realloc(*data, sizeAfter);
-                //memset(&temp + sizeInitial, 0, sizeAfter - sizeInitial);
+                memset(temp + sizeInitial, 0, sizeAfter); //initializing our resized string
             }
             break;
         case 'a':
