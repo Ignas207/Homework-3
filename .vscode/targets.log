@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed May 19 19:52:12 2021
+# Make data base, printed on Thu May 20 00:30:43 2021
 
 # Variables
 
@@ -22,7 +22,6 @@ DESKTOP_SESSION = ubuntu
 .SHELLFLAGS := -c
 # environment
 XDG_SESSION_CLASS = user
- 
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/ignas/snap/code/common/.cache/gdk-pixbuf-loaders.cache
 # environment
@@ -308,7 +307,7 @@ DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=3b56afe5cdb881cd83ba09f
 
 # Files
 
-all: main func reading insertNode
+all: main func reading insertNode createNode
 #  Command line target.
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -317,9 +316,8 @@ all: main func reading insertNode
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/5=0%
 #  recipe to execute (from 'Makefile', line 5):
-		$(CC) $(CFLAGS) -o homework3 main.o func.o f_reading.o f_insertNode.o
-		rm main.o func.o f_reading.o f_insertNode.o
- 
+		$(CC) $(CFLAGS) -o homework3 main.o func.o f_reading.o f_insertNode.o f_createNode.o
+		rm main.o func.o f_reading.o f_insertNode.o f_createNode.o
 
 reading:
 #  Implicit rule search has not been done.
@@ -332,8 +330,15 @@ func:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 18):
+#  recipe to execute (from 'Makefile', line 21):
 		$(CC) -c $(CFLAGS) -o func.o hmwrk_func.c
+
+createNode:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 18):
+		$(CC) -c $(CFLAGS) -o f_createNode.o ./Functions/CreateNode/createNode.c
 
 # Not a target:
 .SUFFIXES:
@@ -344,7 +349,8 @@ func:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-05-19 19:52:08.84795691
+ 
+#  Last modified 2021-05-20 00:30:42.658681603
 #  File has been updated.
 #  Successfully updated.
 
@@ -389,19 +395,19 @@ main:
 		$(CC) -c $(CFLAGS) -o main.o hmwrk_main.c
 
 # files hash-table stats:
-# Load=8/1024=1%, Rehash=0, Collisions=0/28=0%
+# Load=9/1024=1%, Rehash=0, Collisions=0/31=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 26 / storage = 272 B / avg = 10 B
-# current buf: size = 8162 B / used = 272 B / count = 26 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 27 / storage = 283 B / avg = 10 B
+# current buf: size = 8162 B / used = 283 B / count = 27 / avg = 10 B
 
-# strcache performance: lookups = 41 / hit rate = 36%
+# strcache performance: lookups = 44 / hit rate = 38%
 # hash-table stats:
-# Load=26/8192=0%, Rehash=0, Collisions=1/41=2%
-# Finished Make data base on Wed May 19 19:52:12 2021
+# Load=27/8192=0%, Rehash=0, Collisions=1/44=2%
+# Finished Make data base on Thu May 20 00:30:43 2021
 
  

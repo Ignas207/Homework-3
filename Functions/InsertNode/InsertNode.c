@@ -1,5 +1,5 @@
-#include "insertNode.h"
 #include "../../hwrk3.h"
+#include "insertNode.h"
 
 int InsertNode(void **pHead, char which, char *input)
 {
@@ -131,6 +131,69 @@ int InsertNode(void **pHead, char which, char *input)
                 return result;
             *pHead = (void*)pHeadT;
             break;
+    }
+    return 0;
+}
+
+
+
+/**
+ * Function, that put the input at the end of pHead.
+*/
+int SimpleNodeInsert(void **pHead, char which, void *input)
+{
+    
+    Accounts *pHeadA = NULL;
+    AccountsData *tempA = NULL;
+    Accounts *ptempA = NULL;
+    Accounts *ptempA2 = NULL;
+    Transactions *pHeadT = NULL;
+    Transactions *ptempT = NULL;
+    Transactions *ptempT2 = NULL;
+    int result = 0;
+
+    switch(which)
+    {
+        case 'a':
+            pHeadA = (Accounts*)*pHead;
+            if(pHeadA == NULL)
+            {
+                MemAlloc((void**)&pHeadA, 1, 'a');
+                MemAlloc((void**)pHeadA, (int)sizeof((Accounts*)input), 'a');
+                memcpy(pHeadA, (Accounts*)input, sizeof(*pHeadA));
+                pHeadA->pNext = NULL;
+                //tempA2 = tempA;
+                //MemAlloc((void**)&pHeadA, (int)sizeof((Accounts*)*pHead), 'a');
+            }
+            ptempA = (Accounts*)input;
+            ptempA2 = pHeadA;
+            if(ptempA2 != NULL)
+            {
+                while((void*)(ptempA2->pNext) != NULL)
+                    ptempA2 = ptempA2->pNext;
+            }
+            else
+                pHeadA = ptempA;
+            pHeadA->pNext = NULL;
+
+            *pHead = (void*)pHeadT;
+            return 1;
+            break;
+
+        case 't':
+            pHeadT = (Transactions*)*pHead;
+            ptempT = (Transactions*)*pHead;
+            ptempT2 = ptempT;
+            if(ptempT2 != NULL)
+            {
+                while((void*)(ptempT2->pNext) != NULL)
+                    ptempT2 = ptempT2->pNext;
+            }
+            else
+                pHeadT = ptempT;
+            pHeadT->pNext = NULL;
+            *pHead = (void*)pHeadT;
+            return 1;
     }
     return 0;
 }

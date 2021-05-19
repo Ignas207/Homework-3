@@ -1,9 +1,9 @@
 CFLAGS = -g3 -Wall -Wextra -Wconversion 
 CC = gcc
 
-all: main func reading insertNode
-		$(CC) $(CFLAGS) -o homework3 main.o func.o f_reading.o f_insertNode.o
-		rm main.o func.o f_reading.o f_insertNode.o
+all: main func reading insertNode createNode
+		$(CC) $(CFLAGS) -o homework3 main.o func.o f_reading.o f_insertNode.o f_createNode.o
+		rm main.o func.o f_reading.o f_insertNode.o f_createNode.o
 
 main:
 		$(CC) -c $(CFLAGS) -o main.o hmwrk_main.c
@@ -13,6 +13,9 @@ reading:
 
 insertNode:
 		$(CC) -c $(CFLAGS) -o f_insertNode.o ./Functions/InsertNode/InsertNode.c
+
+createNode:
+		$(CC) -c $(CFLAGS) -o f_createNode.o ./Functions/CreateNode/createNode.c
 
 func:
 		$(CC) -c $(CFLAGS) -o func.o hmwrk_func.c
