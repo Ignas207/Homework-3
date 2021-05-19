@@ -1,8 +1,8 @@
-make --dry-run --always-make --keep-going --print-directory
+make --dry-run --keep-going --print-directory
 make: Entering directory '/home/ignas/Documents/TalTech work/II semester/Programing/Homework 3'
 gcc -c -g3 -Wall -Wextra -Wconversion  -o main.o hmwrk_main.c
 gcc -c -g3 -Wall -Wextra -Wconversion  -o func.o hmwrk_func.c
-gcc -g3 -Wall -Wextra -Wconversion  -o homework3 main.o func.o
-rm main.o func.o
+gcc -g3 -Wall -Wextra -Wconversion  -o homework3 main.o func.o f_reading.o f_insertNode.o
+rm main.o func.o f_reading.o f_insertNode.o
 make: Leaving directory '/home/ignas/Documents/TalTech work/II semester/Programing/Homework 3'
  

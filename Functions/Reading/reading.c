@@ -1,11 +1,34 @@
 #include "../../hwrk3.h"
 #include "reading.h"
 
+
+/**
+ * Function, that will read CSV formated data from inputAccounts and inputTransactions,
+ * this data is written in Accounts **A and Transactions **T.
+ * 
+ * Parameters:
+ *      1. Accounts **A -> accounts node.
+ *      2. Transactions **T -> transactions node.
+ *      3. char *inputAccounts -> accounts data file name.
+ *      4. char *inputTransactions -> transactions data file name.
+ *      5. int *amountA -> amount of accounts data points read.
+ *      6. int *amountT -> amount of transactions data points read.
+ * 
+ * Returns:
+ *      1. 1 -> one or both files could not be oppened.
+ *      2. 0 -> reading was succesfull.
+ * 
+ * */
 int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions, int *amountA, int *amountT)
 {
     char temp[LEN_TEMP];
     int i = 0;
     int result = 0;
+
+    if(inputAccounts == NULL)           //maybe this is unnesesary
+        inputAccounts = FILE_INPUT_ACCOUNT;
+    if(inputTransactions == NULL)
+        inputTransactions = FILE_INPUT_TRANSACTIONS;
 
     FILE *fInputAccounts = NULL;
     FILE *fInputTransactions = NULL;
@@ -58,94 +81,5 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
 
     *amountT = i;
     fclose(fInputTransactions);
-    return 0;
-}
-
-
-int InsertNode(void **pHead, char which, char *input)
-{
-    Accounts *pHeadA = NULL;
-    Accounts *tempA = NULL;
-    Accounts *pTempAPrev = NULL;
-    Accounts *ptempA2 = NULL;
-
-    Transactions *ptempTPrev = NULL;
-    Transactions *pHeadT = NULL;
-    Transactions *tempT = NULL;
-    Transactions *pTempT2 = NULL;
-    int result = 0;
-
-    switch(which)
-    {
-        case 'a':
-            pHeadA = (Accounts*)*pHead;
-            pTempAPrev = pHeadA;
-            ptempA2 = pTempAPrev;
-            result = CreateNode((void**)&tempA, 'a', input);
-            if(result == 0)
-            {
-                if((void*)(ptempA2) != NULL)
-                {
-                    while(strcmp(ptempA2->fistName, tempA->fistName) < 0)
-                    {
-                        pTempAPrev = ptempA2;
-                        ptempA2 = ptempA2->pNext;
-                        if(ptempA2 == NULL)
-                            break;
-                    }
-                    if(pTempAPrev == ptempA2) //checking if we want to put it in front
-                    {
-                        pHeadA = tempA; 
-                        pHeadA->pNext = pTempAPrev;
-                    }
-                    else //putting things in the middle or the back
-                    {
-                        pTempAPrev->pNext = tempA;
-                        tempA->pNext = ptempA2;
-                    }
-                }
-                else
-                    pHeadA = tempA;
-            }
-            else
-                return result;
-            *pHead = (void*)pHeadA;
-            break;
-
-        case 't':
-            pHeadT = (Transactions*)*pHead;
-            ptempTPrev = pHeadT;
-            pTempT2 = pHeadT;
-            result = CreateNode((void**)&tempT, 't', input);
-            if(result == 0)
-            {
-                if(pTempT2 != NULL) //this will have to be ordered by the balanceDelta!
-                {
-                    while(pTempT2->balanceDelta > tempT->balanceDelta)
-                    {   
-                        ptempTPrev = pTempT2;
-                        pTempT2 = pTempT2->pNext;
-                        if(pTempT2 == NULL)
-                            break;
-                    }
-                    if(ptempTPrev == pTempT2)
-                    {
-                        pHeadT = tempT;
-                        pHeadT->pNext = ptempTPrev;
-                    }
-                    else
-                    {
-                        ptempTPrev->pNext = tempT;
-                        tempT->pNext = pTempT2;
-                    }
-                }
-                else
-                    pHeadT = tempT;
-            }
-            else
-                return result;
-            *pHead = (void*)pHeadT;
-            break;
-    }
     return 0;
 }

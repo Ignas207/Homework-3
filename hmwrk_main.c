@@ -17,7 +17,7 @@ int main(void)
     printf("testing 2\n");
     */
 
-    MemFree((void**)&A, 'a');
-    MemFree((void**)&T, 't');
+    //MemFree((void**)&A, 'a');
+    //MemFree((void**)&T, 't');
     return 0;
 }

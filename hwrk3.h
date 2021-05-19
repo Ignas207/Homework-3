@@ -1,5 +1,5 @@
-#ifndef HMWRK2_H
-#define HMWRK2_H
+#ifndef HMWRK3_H
+#define HMWRK3_H
 
 #include <stdlib.h>
 #include <string.h>
@@ -18,7 +18,7 @@
 
 typedef struct nodeA
 {
-    AccountsData *pdataA;
+    struct AccountsData *pdataA;
     struct nodeA *pPrev;
     struct nodeA *pNext;
 } Accounts;
@@ -33,7 +33,7 @@ typedef struct
 
 typedef struct nodeT
 {
-    TransactionsData *pdataT;
+    struct TransactionsData *pdataT;
     struct nodeT *pPrev;
     struct nodeT *pNext;
 } Transactions;

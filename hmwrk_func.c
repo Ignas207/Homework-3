@@ -152,6 +152,7 @@ int SearchMenu(char *search)
 }
 
 
+/*
 int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions, int *amountA, int *amountT)
 {
     char temp[LEN_TEMP];
@@ -212,6 +213,7 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
     return 0;
 }
 
+*/
 
 /**
  * Function, that will find the node that contains the key.
@@ -238,6 +240,7 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
  **/
 int FindNodebyKey(void **node, void **result, char *key, char which, int position, int skip, int type)
 {
+    /*
     Transactions *T = NULL;
     Accounts *A = NULL;
     int counter = 0;
@@ -318,12 +321,14 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
             break;
     }
     return 0;
+    */
 }
 
 
 //modify this so we could use 
 void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
 {
+    /*
     Transactions *tempT2 = NULL;
     Transactions *tempT = T;
     Accounts *tempA = NULL;
@@ -417,6 +422,7 @@ void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
 
 void PrintNode(void *node, char which)
 {
+    /*
     Accounts *A = NULL;
     Transactions *T = NULL;
 
@@ -543,6 +549,7 @@ int InsertNode(void **pHead, char which, char *input)
             break;
     }
     return 0;
+    */
 }
 
 
@@ -569,8 +576,8 @@ int CreateNode(void **node, char which, char *input)
     int i = 0;
     int error = 0;
     int result = 0;
-    Accounts *tempA = NULL;
-    Transactions *tempT = NULL;
+    AccountsData *tempA = NULL;
+    TransactionsData *tempT = NULL;
     switch(which)
     {
         case 'a':
@@ -617,7 +624,7 @@ int CreateNode(void **node, char which, char *input)
                         return i *(-1); //memory allocation error
                     }
                 }
-                tempA->pNext = NULL;
+                //tempA->pNext = NULL;
             }
             else
             {
@@ -682,7 +689,7 @@ int CreateNode(void **node, char which, char *input)
                         return i *(-1); //memory allocation error
                     }
                 }
-                tempT->pNext = NULL;
+                //tempT->pNext = NULL;
             }
             else
             {
@@ -702,6 +709,7 @@ int CreateNode(void **node, char which, char *input)
 */
 int SimpleNodeInsert(void **pHead, char which, void *input)
 {
+    /*
     Accounts *pHeadA = NULL;
     Accounts *ptempA = NULL;
     Accounts *ptempA2 = NULL;
@@ -754,6 +762,7 @@ int SimpleNodeInsert(void **pHead, char which, void *input)
             return 1;
     }
     return 0;
+    */
 }
 
 
@@ -823,6 +832,7 @@ void ReadError(int condintion, int line, int amount)
 //will memclear the node
 void Unload(void **node, char which)
 {
+    /*
     Accounts *tempA = NULL;
     Transactions *tempT = NULL;
     switch(which)
@@ -843,6 +853,7 @@ void Unload(void **node, char which)
         default:
             break;
     }
+    */
 }
 
 
@@ -897,24 +908,40 @@ int MemAlloc(void **data, int amount, char type)
             break;
         case 'a':
             if(*data == NULL)
-                *data = (Accounts *)calloc((size_t)amount, sizeof(Accounts));
+                *data = (AccountsData *)calloc((size_t)amount, sizeof(AccountsData));
             else
             {
-                sizeAfter = sizeof(Accounts) * (size_t)amount;
+                sizeAfter = sizeof(AccountsData) * (size_t)amount;
                 //sizeInitial = sizeof(*data) / sizeof(Data);
-                temp = (Accounts *)realloc(*data, sizeAfter);
+                temp = (AccountsData *)realloc(*data, sizeAfter);
                 //memset(&temp + sizeInitial, 0, sizeAfter - sizeInitial);
             }
             break;
         case 't':
             if(*data == NULL)
-                *data = (Transactions *)calloc((size_t)amount, sizeof(Transactions));
+                *data = (TransactionsData *)calloc((size_t)amount, sizeof(TransactionsData));
+            else
+            {
+                sizeAfter = sizeof(TransactionsData) * (size_t)amount;
+                temp = (TransactionsData *)realloc(*data, sizeAfter);
+            }
+            break;
+        case 'A':
+            if(*data == NULL)
+                *data = (Accounts*)calloc((size_t)amount, sizeof(Accounts));
+            else
+            {
+                sizeAfter = sizeof(Accounts) * (size_t)amount;
+                temp = (Accounts*)realloc(*data, sizeAfter);
+            }
+            break;
+        case 'T':
+            if(*data == NULL)
+                *data = (Transactions*)calloc((size_t)amount, sizeof(Transactions));
             else
             {
                 sizeAfter = sizeof(Transactions) * (size_t)amount;
-                //sizeInitial = sizeof(*data) / sizeof(Data);
-                temp = (Transactions *)realloc(*data, sizeAfter);
-                //memset(&temp + sizeInitial, 0, sizeAfter - sizeInitial);
+                temp = (Transactions*)realloc(*data, sizeAfter);
             }
             break;
         default:
