@@ -18,14 +18,27 @@
 
 typedef struct nodeA
 {
+    AccountsData *dataA;
+    struct nodeA *pPrev;
+    struct nodeA *pNext;
+} Accounts;
+
+typedef struct
+{
     char *fistName;
     char *lastName;
     float balance;
     char accountNumber[ACCOUNT_DIGEST_LEN];
-    struct nodeA *pNext;
-} Accounts;
+} AccountsData;
 
 typedef struct nodeT
+{
+    TransactionsData *dataT;
+    struct nodeT *pPrev;
+    struct nodeT *pNext;
+} Transactions;
+
+typedef struct
 {
     char transactionID[TRANSACTION_DIGEST_LEN];
     char accountNumber[ACCOUNT_DIGEST_LEN];
@@ -33,17 +46,18 @@ typedef struct nodeT
     char *time;
     char *description;
     float balanceDelta;
-    struct nodeT *pNext;
-} Transactions;
+} TransactionsData;
 
-void Searching(void **node, char which);
+void Searching(Accounts **A, Transactions **T);
 int SearchMenu(char *search);
 void Menu(Accounts **A, Transactions **T, int amountA, int amountT); //working on it
 
 void ReadError(int condintion, int line, int amount); //done?
 
 void PrintNode(void *node, char which); //done
-void PrintList(Accounts *A, Transactions *T, char which); //done
+void PrintList(Accounts *A, Transactions *T, char which, int type, char *key); //done
+
+int SimpleNodeInsert(void **pHead, char which, void *input);
 
 void Unload(void **node, char which); //done
 int InsertNode(void **pHead, char which, char *input); //done

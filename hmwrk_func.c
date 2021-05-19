@@ -26,11 +26,11 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
                 break;
             case 2:
                 printf("\nSelected: Display all of the read results\n\n");
-                PrintList(*A, *T, 'a');
+                PrintList(*A, *T, 'a', 0, "");
                 break;
             case 3:
                 printf("\nSelected: Display a speciffic account\n\n");
-                //temp = SearchMenu();
+                Searching(A, T);
                 break;
             case 0:
                 printf("\nExiting the program...\n");
@@ -44,14 +44,17 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
 }
 
 
-void Searching(void **node, char which)
+void Searching(Accounts **A, Transactions **T)
 {
     int i = 0;
     int counting = 1;
+    int amount = 0;
     Accounts **tempA = NULL;
+    Accounts **tempA2 = NULL;
     Transactions **tempT = NULL;
-    Accounts *A = NULL;
-    Transactions *T = NULL;
+    Accounts *At = *A;
+    Transactions *Tt = *T;
+    void *temp1 = NULL;
     char key[LEN_TEMP] = {'\0'};
     int pos = 0;
     int posT = 0;
@@ -59,32 +62,64 @@ void Searching(void **node, char which)
 
     if(type == 1 || type == 2 || type == 4)
     {
-        A = (Accounts*)*node;
-        while((void*)A != NULL)
+        //A = (Accounts*)*node;
+        while((void*)At != NULL)
         {
-            posT = FindNodebyKey(node, (void**)(*tempA + i), key, 'a', counting, pos, type);
+            //MemAlloc((void**)&tempA, );
+            //*(tempA + i) = NULL;
+            posT = FindNodebyKey((void**)&At, &temp1, key, 'a', counting, pos, type);
             if(posT != 0)
             {
+                /*
+                if(tempA == NULL) //constructing a temp node for our answers
+                {
+                    MemAlloc((void**)&tempA, 1, 'a');
+                    MemAlloc((void**)tempA, (int)sizeof((Accounts*)temp1), 'a');
+                    memcpy(*tempA, (Accounts*)temp1, sizeof(**tempA));
+                    //*tempA = (Accounts*)temp1;
+                    (*tempA)->pNext = NULL;
+                    //tempA2 = tempA;
+                }
+                else
+                {
+                    while((*tempA2)->pNext != NULL) //finding the end
+                        (*tempA2) = (*tempA2)->pNext;
+                    MemAlloc((void**)&(*tempA2)->pNext, (int)sizeof((Accounts*)temp1), 'a');
+                    memcpy((*tempA2)->pNext, (Accounts*)temp1, sizeof(*(*tempA2)->pNext));
+                    //(*tempA)->pNext = (Accounts*)temp1;
+                    (*tempA2) = (*tempA2)->pNext;
+                    (*tempA2)->pNext = NULL;
+                }
+                */
+                if(tempA == NULL)
+                    MemAlloc((void**)&tempA, 1, 'a');
+                
+                SimpleNodeInsert((void**)tempA, 'a', temp1);
                 pos = posT;
                 i++;
+                
             }
-            A = A->pNext;
+            At = At->pNext;
         }
+        PrintList(*tempA, *T, 'a', type, key);
     } //fix this
-    else if(type == 3 || type == 4 || type == 5)
+    else if(type == 3 || type == 5)
     {
-        T = (Transactions*)*node;
-        while((void*)T != NULL)
+        //T = (Transactions*)*node;
+        if((void*)T != NULL)
         {
-            posT = FindNodebyKey(node, (void**)(*tempT + i), key, 't', counting, pos, type);
+            posT = FindNodebyKey((void*)Tt, (void**)(*tempT + i), key, 't', counting, pos, type);
             if(posT != 0)
             {
                 pos = posT;
                 i++;
             }
-            T = T->pNext;
+            Tt = Tt->pNext;
         }
     }
+    amount = i;
+
+
 }
 
 
@@ -95,7 +130,7 @@ int SearchMenu(char *search)
     {
         printf("How would you like to search?\n");
         printf("    (1) First name\n");
-        printf("    (2) Last name");
+        printf("    (2) Last name\n");
         printf("    (3) Date\n");
         printf("    (4) Account number\n");
         printf("    (5) Account Description\n\n");
@@ -103,11 +138,11 @@ int SearchMenu(char *search)
         scanf("%d", &selection);
         if(selection > 0 && selection < 5)
         {
-            printf("Insert the search term: > ");
+            printf("Insert the search term\n");
+            printf("> ");
             scanf("%s", search);
             return selection;
         }
-            
         else
         {
             printf("Choice %d is invalid!\n", selection);
@@ -223,15 +258,15 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
                 {
                     case 1:
                         if(strncmp(A->fistName, key, strlen(key)) == 0) //firstName comparison
-                        counter++;
+                            counter++;
                         break;
                     case 2:
                         if(strncmp(A->lastName, key, strlen(key)) == 0) //lastName comparison
-                        counter++;
+                            counter++;
                         break;
                     case 4:
                         if(strncmp(A->accountNumber, key, strlen(key)) == 0) //accountNumber comparison
-                        counter++;
+                            counter++;
                         break;
                     default:
                         break;
@@ -260,15 +295,15 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
                 {
                     case 3:
                         if(strncmp(T->date, key, strlen(key)) == 0) //date comparison
-                        counter++;
+                            counter++;
                         break;
                     case 4:
                         if(strncmp(T->accountNumber, key, strlen(key)) == 0) //accountNumber comparison
-                        counter++;
+                            counter++;
                         break;
                     case 5:
                         if(strncmp(T->description, key, strlen(key)) == 0) //description comparison
-                        counter++;
+                            counter++;
                         break;
                     default:
                         break;
@@ -286,41 +321,75 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
 }
 
 
-void PrintList(Accounts *A, Transactions *T, char which)
+//modify this so we could use 
+void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
 {
     Transactions *tempT2 = NULL;
     Transactions *tempT = T;
+    Accounts *tempA = NULL;
     int i = 1;
     int counting_position = 0;
     int temp_pos = 0;
     
-    while((void*)A != NULL)
+    if(type == 0) //default config for priting everything
     {
-        printf("Name: %s %s\n", A->fistName, A->lastName);
-        printf("Account balance: %.2f\n", A->balance);
-        printf("Account number: %c[1m%s%c[0m\n", ESC, A->accountNumber, ESC);
-        tempT = T;
-        i = 1;
-        counting_position = 0;
-        while((void*)tempT != NULL)
+        while((void*)A != NULL)
         {
-            temp_pos = FindNodebyKey((void*)&T, (void**)&tempT2, A->accountNumber, 't', i, counting_position, 4);
-            if(temp_pos != 0)
+            printf("Name: %s %s\n", A->fistName, A->lastName);
+            printf("Account balance: %.2f\n", A->balance);
+            printf("Account number: %c[1m%s%c[0m\n", ESC, A->accountNumber, ESC);
+            tempT = T;
+            i = 1;
+            counting_position = 0;
+            while((void*)tempT != NULL)
             {
-                //https://www.unix.com/programming/21073-bold-text.html
-                counting_position = temp_pos; //saving the postion, so the next time we search we save time!
-                printf("    Account number:  %c[1m%s%c[0m\n", ESC, tempT2->accountNumber, ESC);
-                printf("    Transaction ID: %s\n", tempT2->transactionID);
-                printf("    Date: %s\n", tempT2->date);
-                printf("    Time: %s\n", tempT2->time);
-                printf("    Balance change: %.2f\n", tempT2->balanceDelta);
-                printf("    Description: %s\n\n", tempT2->description);
-                i++;
+                temp_pos = FindNodebyKey((void*)&T, (void**)&tempT2, A->accountNumber, 't', i, counting_position, 4);
+                if(temp_pos != 0)
+                {
+                    //https://www.unix.com/programming/21073-bold-text.html
+                    counting_position = temp_pos; //saving the postion, so the next time we search we save time!
+                    printf("    Account number:  %c[1m%s%c[0m\n", ESC, tempT2->accountNumber, ESC);
+                    printf("    Transaction ID: %s\n", tempT2->transactionID);
+                    printf("    Date: %s\n", tempT2->date);
+                    printf("    Time: %s\n", tempT2->time);
+                    printf("    Balance change: %.2f\n", tempT2->balanceDelta);
+                    printf("    Description: %s\n\n", tempT2->description);
+                    i++;
+                }
+                tempT = tempT->pNext;
             }
-            tempT = tempT->pNext;
+            A = A->pNext;
         }
-        A = A->pNext;
     }
+    else
+    {
+        switch(which)
+        {
+            case 'a':
+                if((void*)A == NULL)
+                {
+                    printf("No results matching %c[1m%s%c[0m were found!\n", ESC, key, ESC);
+                    break;
+                }
+                switch(type)
+                {
+                    case 1:
+                        printf("Search matches with %c[1m%s%c[0m:\n", ESC, key, ESC);
+                        tempA = A;
+                        i = 0;
+                        while(tempA != NULL)
+                        {
+                            printf("(%d) %c[1m%s%c[0m%s\n", i, ESC, key, ESC, &(*(A->fistName + strlen(A->fistName) - strlen(key))));
+                            i++;
+                        }
+                }
+                break;
+            case 't':
+                break;
+        }
+        
+    }
+    
     /*
     switch(which)
     {
@@ -498,6 +567,7 @@ int CreateNode(void **node, char which, char *input)
 {
     char temp[LEN_TEMP] = {'\0'};
     int i = 0;
+    int error = 0;
     int result = 0;
     Accounts *tempA = NULL;
     Transactions *tempT = NULL;
@@ -515,27 +585,22 @@ int CreateNode(void **node, char which, char *input)
                         Unload((void**)&tempA, 'a');
                         return i; //exception occured while reading the i-th element
                     }
-
+                    
+                    error = 0;
                     switch(i)
                     {
                         case 1: //firstName
                             if(MemAlloc((void*)&tempA->fistName, (int)strlen(temp) +1, 'c'))
                                 strncpy(tempA->fistName, temp, strlen(temp));
                             else
-                            {
-                                Unload((void**)&tempA, 'a');
-                                return i *(-1); //memory allocation error
-                            }
+                                error = 1;
                             break;
                         
                         case 2: //lastName
                             if(MemAlloc((void*)&tempA->lastName, (int)strlen(temp) +1, 'c'))
                                 strncpy(tempA->lastName, temp, strlen(temp));
                             else
-                            {
-                                Unload((void**)&tempA, 'a');
-                                return i *(-1); //memory allocation error
-                            }
+                                error = 1;
                             break;
 
                         case 3: //accountNumber
@@ -545,6 +610,11 @@ int CreateNode(void **node, char which, char *input)
                         case 4: //balance
                             tempA->balance = (float)atof(temp);
                             break;
+                    }
+                    if(error == 1)
+                    {
+                        Unload((void**)&tempA, 't');
+                        return i *(-1); //memory allocation error
                     }
                 }
                 tempA->pNext = NULL;
@@ -570,6 +640,7 @@ int CreateNode(void **node, char which, char *input)
                         return i; //exception occured while reading the i-th element
                     }
                         
+                    error = 0;    
                     switch(i)
                     {
                         case 1:
@@ -584,20 +655,14 @@ int CreateNode(void **node, char which, char *input)
                             if(MemAlloc((void*)&tempT->date, (int)strlen(temp) +1, 'c'))
                                 strncpy(tempT->date, temp, (size_t)strlen(temp));
                             else
-                            {
-                                Unload((void**)&tempT, 't');
-                                return i *(-1); //memory allocation error
-                            }
+                                error = 1;
                             break;
 
                         case 4:
                             if(MemAlloc((void*)&tempT->time, (int)strlen(temp) +1, 'c'))
                                 strncpy(tempT->time, temp, strlen(temp));
                             else
-                            {
-                                Unload((void**)&tempT, 't');
-                                return i *(-1); //memory allocation error
-                            }
+                                error = 1;
                             break;
 
                         case 5:
@@ -608,11 +673,13 @@ int CreateNode(void **node, char which, char *input)
                             if(MemAlloc((void*)&tempT->description, (int)strlen(temp) +1, 'c'))
                                 strncpy(tempT->description, temp, strlen(temp));
                             else
-                            {
-                                Unload((void**)&tempT, 't');
-                                return i *(-1); //memory allocation error
-                            }
+                                error = 1;
                             break;
+                    }
+                    if(error == 1)
+                    {
+                        Unload((void**)&tempA, 't');
+                        return i *(-1); //memory allocation error
                     }
                 }
                 tempT->pNext = NULL;
@@ -627,6 +694,66 @@ int CreateNode(void **node, char which, char *input)
             break;
     }
     return 0; //we good I guess?
+}
+
+
+/**
+ * Function, that put the input at the end of pHead.
+*/
+int SimpleNodeInsert(void **pHead, char which, void *input)
+{
+    Accounts *pHeadA = NULL;
+    Accounts *ptempA = NULL;
+    Accounts *ptempA2 = NULL;
+    Transactions *pHeadT = NULL;
+    Transactions *ptempT = NULL;
+    Transactions *ptempT2 = NULL;
+    int result = 0;
+
+    switch(which)
+    {
+        case 'a':
+            pHeadA = (Accounts*)*pHead;
+            if(pHeadA == NULL)
+            {
+                MemAlloc((void**)&pHeadA, 1, 'a');
+                MemAlloc((void**)pHeadA, (int)sizeof((Accounts*)input), 'a');
+                memcpy(pHeadA, (Accounts*)input, sizeof(*pHeadA));
+                pHeadA->pNext = NULL;
+                //tempA2 = tempA;
+                //MemAlloc((void**)&pHeadA, (int)sizeof((Accounts*)*pHead), 'a');
+            }
+            ptempA = (Accounts*)input;
+            ptempA2 = pHeadA;
+            if(ptempA2 != NULL)
+            {
+                while((void*)(ptempA2->pNext) != NULL)
+                    ptempA2 = ptempA2->pNext;
+            }
+            else
+                pHeadA = ptempA;
+            pHeadA->pNext = NULL;
+
+            *pHead = (void*)pHeadT;
+            return 1;
+            break;
+
+        case 't':
+            pHeadT = (Transactions*)*pHead;
+            ptempT = (Transactions*)*pHead;
+            ptempT2 = ptempT;
+            if(ptempT2 != NULL)
+            {
+                while((void*)(ptempT2->pNext) != NULL)
+                    ptempT2 = ptempT2->pNext;
+            }
+            else
+                pHeadT = ptempT;
+            pHeadT->pNext = NULL;
+            *pHead = (void*)pHeadT;
+            return 1;
+    }
+    return 0;
 }
 
 
