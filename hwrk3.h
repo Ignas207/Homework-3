@@ -18,7 +18,7 @@
 
 typedef struct nodeA
 {
-    AccountsData *dataA;
+    AccountsData *pdataA;
     struct nodeA *pPrev;
     struct nodeA *pNext;
 } Accounts;
@@ -33,7 +33,7 @@ typedef struct
 
 typedef struct nodeT
 {
-    TransactionsData *dataT;
+    TransactionsData *pdataT;
     struct nodeT *pPrev;
     struct nodeT *pNext;
 } Transactions;
