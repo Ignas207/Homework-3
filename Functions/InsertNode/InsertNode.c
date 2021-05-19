@@ -20,41 +20,54 @@ int InsertNode(void **pHead, char which, char *input)
     {
         case 'a':
             pHeadA = (Accounts*)*pHead;
+            if(pHeadA == NULL)
+                MemAlloc((void*)&pHeadA, 1, 'A');
             pCurrent = pHeadA;
-            tempA = pCurrent->pdataA;
+            pTempA = pCurrent;
             result = CreateNode((void**)&tempA2, 'a', input); //filling tempA2 with data from the CSV string
             if(result == 0)
             {
-                while(pCurrent->pNext != NULL) //searching till we reach the end
+                while((void*)pTempA != NULL) //searching till we reach the end
                 {
-                    tempA = pCurrent->pdataA;
+                    tempA = pTempA->pdataA;
                     if((void*)(tempA) != NULL) //dont have to do this but shure
                     {
-                        if(strcmp(tempA2->fistName, tempA->fistName) < 0) //finding at which point our string
-                        {                                                 //is larger than the rest of the node
-                            pCurrent = pCurrent->pNext; //TODO: maybe add a comparison for last name aswel?
+                        if(strcmp(tempA2->fistName, tempA->fistName) > 0) //finding at which point our string
+                        {                                                //is larger than the rest of the node
+                            if(pTempA != NULL)
+                            {
+                                pTempA = pTempA->pNext;
+                                if(pCurrent->pNext != NULL)
+                                    pCurrent = pCurrent->pNext; //TODO: maybe add a comparison for last name aswel?
+                            }
                         }
                         else
                             break;
                     }
+                    else
+                        break;
                 }
                 if(pCurrent->pPrev == NULL) //checking if we are putting it in the front
                 {
-                    if(MemAlloc((void*)(pCurrent->pPrev), 1, 'A')) //look at this later
+                    if((void*)pCurrent->pdataA == NULL) //if our node is completely empty
                     {
-                        (pCurrent->pPrev)->pNext = pCurrent;
-                        //pCurrent->pPrev =  //we alrady allocated it?
-                        (pCurrent->pPrev)->pdataA = tempA2;
+                        pCurrent->pdataA = tempA2;
+                        pCurrent->pNext = NULL;
+                        
+                        *pHead = (void*)pHeadA; //dont really like this, but it will do
+                        break;
                     }
                 }
-                else //putting somewhere else
+
+                pTempA = NULL; //putting somewhere else
+                if(MemAlloc((void**)&pTempA, 1, 'A'))
                 {
-                    if(MemAlloc((void*)pTempA, 1, 'A'))
-                    {
-                        pTempA->pdataA = tempA2;
-                        pTempA->pPrev = pCurrent->pPrev;
-                        pTempA->pNext = pCurrent;
-                    }
+                    pTempA->pdataA = tempA2;
+                    pTempA->pPrev = pCurrent;
+                    pTempA->pNext = pCurrent->pNext;
+                    if(pCurrent->pNext != NULL)
+                        (pCurrent->pNext)->pPrev = pTempA;
+                    pCurrent->pNext = pTempA;
                 }
             }
             else
@@ -64,41 +77,54 @@ int InsertNode(void **pHead, char which, char *input)
 
         case 't':
             pHeadT = (Transactions*)*pHead;
+            if(pHeadT == NULL)
+                MemAlloc((void*)&pHeadT, 1, 'T');
             pCurrentT = pHeadT;
-            tempT = pCurrentT->pdataT;
-            result = CreateNode((void**)&tempT2, 'a', input); //filling tempT2 with data from the CSV string
+            pTempT = pCurrentT;
+            result = CreateNode((void**)&tempT2, 't', input); //filling tempT2 with data from the CSV string
             if(result == 0)
             {
-                while(pCurrentT->pNext != NULL) //searching till we reach the end
+                while((void*)pTempT != NULL) //searching till we reach the end
                 {
-                    tempT = pCurrentT->pdataT;
+                    tempT = pTempT->pdataT;
                     if((void*)(tempA) != NULL) //dont have to do this but shure
                     {
                         if(tempT2->balanceDelta > tempT->balanceDelta) //finding at which point our string
                         {                                                 //is larger than the rest of the node
-                            pCurrentT = pCurrentT->pNext; //TODO: maybe add a comparison for last name aswel?
+                            if(pTempT != NULL)
+                            {
+                                pTempT = pTempT->pNext;
+                                if(pCurrentT->pNext != NULL)
+                                    pCurrentT = pCurrentT->pNext;
+                            }
                         }
                         else
                             break;
                     }
+                    else
+                        break;
                 }
                 if(pCurrentT->pPrev == NULL) //checking if we are putting it in the front
                 {
-                    if(MemAlloc((void*)(pCurrentT->pPrev), 1, 'A')) //look at this later
+                    if((void*)pCurrentT->pdataT == NULL)
                     {
-                        (pCurrentT->pPrev)->pNext = pCurrentT;
-                        //pCurrent->pPrev =  //we alrady allocated it?
-                        (pCurrentT->pPrev)->pdataT = tempT2;
+                        pCurrentT->pdataT = tempT2;
+                        pCurrentT->pNext = NULL;
+
+                        *pHead = (void*)pHeadT;
+                        break;
                     }
                 }
-                else //putting somewhere else
+                
+                pTempT = NULL;
+                if(MemAlloc((void**)&pTempT, 1, 'T'))
                 {
-                    if(MemAlloc((void*)pTempT, 1, 'A'))
-                    {
-                        pTempT->pdataT = tempT2;
-                        pTempT->pPrev = pCurrentT->pPrev;
-                        pTempT->pNext = pCurrentT;
-                    }
+                    pTempT->pdataT = tempT2;
+                    pTempT->pPrev = pCurrentT;
+                    pTempT->pNext = pCurrentT->pNext;
+                    if(pCurrentT->pNext != NULL)
+                        (pCurrentT->pNext)->pPrev = pTempT;
+                    pCurrentT->pNext = pTempT;
                 }
             }
             else

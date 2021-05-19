@@ -394,35 +394,40 @@ void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
         }
         
     }
+    */
     
-    /*
+    int i = 0;
     switch(which)
     {
         case 'a':
-            A = (Accounts*)node;
+            //A = (Accounts*)node;
             while((void*)A != NULL)
             {
                 PrintNode((void*)A, 'a');
                 A = A->pNext;
+                i++;
             }
+            printf("\nThere are %d elements.\n", i);
             break;
         
         case 't':
-            T = (Transactions*)node;
+            //T = (Transactions*)node;
             while((void*)T != NULL)
             {
                 PrintNode((void*)T, 't');
                 T = T->pNext;
+                i++;
             }
+            printf("\nThere are %d elements.\n", i);
             break;
     }
-    */
+    
 }
 
 
 void PrintNode(void *node, char which)
 {
-    /*
+    
     Accounts *A = NULL;
     Transactions *T = NULL;
 
@@ -436,13 +441,15 @@ void PrintNode(void *node, char which)
                 return;
             }
             printf("\nNode %p:\n", (void*)A);
-            printf("    firstName: %s\n", A->fistName);
-            printf("    lastName: %s\n", A->lastName);
-            printf("    balance: %.2f\n", A->balance);
-            printf("    accountNumber: %s\n", A->accountNumber);
+            printf("    firstName: %s\n", ((AccountsData*)(A->pdataA))->fistName);
+            printf("    lastName: %s\n", ((AccountsData*)(A->pdataA))->lastName);
+            printf("    balance: %.2f\n", ((AccountsData*)(A->pdataA))->balance);
+            printf("    accountNumber: %s\n", ((AccountsData*)(A->pdataA))->accountNumber);
             printf("    pNext: %p\n", A->pNext);
+            printf("    Previous: %p\n", A->pPrev);
             break;
 
+        
         case 't':
             T = (Transactions*)node;
             if(T == NULL)
@@ -451,18 +458,21 @@ void PrintNode(void *node, char which)
                 return;
             }
             printf("\nNode %p:\n", (void*)T);
-            printf("    transactionID: %s\n", T->transactionID);
-            printf("    accountNumber: %s\n", T->accountNumber);
-            printf("    date: %s\n", T->date);
-            printf("    time: %s\n", T->time);
-            printf("    description: %s\n", T->description);
-            printf("    balanceDelta: %.2f\n", T->balanceDelta);
+            printf("    transactionID: %s\n", ((TransactionsData*)(T->pdataT))->transactionID);
+            printf("    accountNumber: %s\n", ((TransactionsData*)(T->pdataT))->accountNumber);
+            printf("    date: %s\n", ((TransactionsData*)(T->pdataT))->date);
+            printf("    time: %s\n", ((TransactionsData*)(T->pdataT))->time);
+            printf("    description: %s\n", ((TransactionsData*)(T->pdataT))->description);
+            printf("    balanceDelta: %.2f\n", ((TransactionsData*)(T->pdataT))->balanceDelta);
             printf("    pNext: %p\n", T->pNext);
+            printf("    pPrev: %p\n", T->pPrev);
             break;
+            
     }
 }
 
 
+/*
 int InsertNode(void **pHead, char which, char *input)
 {
     Accounts *pHeadA = NULL;
@@ -549,9 +559,9 @@ int InsertNode(void **pHead, char which, char *input)
             break;
     }
     return 0;
-    */
+    
 }
-
+*/
 
 /**
  *  Function, that creates the node and fills it with data.

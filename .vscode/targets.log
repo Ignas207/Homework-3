@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed May 19 19:46:37 2021
+# Make data base, printed on Wed May 19 19:52:12 2021
 
 # Variables
 
@@ -22,6 +22,7 @@ DESKTOP_SESSION = ubuntu
 .SHELLFLAGS := -c
 # environment
 XDG_SESSION_CLASS = user
+ 
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/ignas/snap/code/common/.cache/gdk-pixbuf-loaders.cache
 # environment
@@ -288,7 +289,6 @@ TERM = xterm-256color
 VSCODE_PID = 18961
 # environment
 DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=3b56afe5cdb881cd83ba09fa60a503f8
- 
 # variable set hash-table stats:
 # Load=139/1024=14%, Rehash=0, Collisions=22/169=13%
 
@@ -298,9 +298,9 @@ DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=3b56afe5cdb881cd83ba09f
 
 # Directories
 
-# . (device 2049, inode 3148427): 20 files, no impossibilities.
+# . (device 2049, inode 3148427): 17 files, no impossibilities.
 
-# 20 files, no impossibilities in 1 directories.
+# 17 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -308,7 +308,7 @@ DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=3b56afe5cdb881cd83ba09f
 
 # Files
 
-all: main func
+all: main func reading insertNode
 #  Command line target.
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -319,6 +319,7 @@ all: main func
 #  recipe to execute (from 'Makefile', line 5):
 		$(CC) $(CFLAGS) -o homework3 main.o func.o f_reading.o f_insertNode.o
 		rm main.o func.o f_reading.o f_insertNode.o
+ 
 
 reading:
 #  Implicit rule search has not been done.
@@ -343,7 +344,7 @@ func:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-05-19 19:46:31.226157147
+#  Last modified 2021-05-19 19:52:08.84795691
 #  File has been updated.
 #  Successfully updated.
 
@@ -388,19 +389,19 @@ main:
 		$(CC) -c $(CFLAGS) -o main.o hmwrk_main.c
 
 # files hash-table stats:
-# Load=8/1024=1%, Rehash=0, Collisions=0/24=0%
+# Load=8/1024=1%, Rehash=0, Collisions=0/28=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 29 / storage = 304 B / avg = 10 B
-# current buf: size = 8162 B / used = 304 B / count = 29 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 26 / storage = 272 B / avg = 10 B
+# current buf: size = 8162 B / used = 272 B / count = 26 / avg = 10 B
 
-# strcache performance: lookups = 42 / hit rate = 30%
+# strcache performance: lookups = 41 / hit rate = 36%
 # hash-table stats:
-# Load=29/8192=0%, Rehash=0, Collisions=1/42=2%
-# Finished Make data base on Wed May 19 19:46:37 2021
+# Load=26/8192=0%, Rehash=0, Collisions=1/41=2%
+# Finished Make data base on Wed May 19 19:52:12 2021
 
  
