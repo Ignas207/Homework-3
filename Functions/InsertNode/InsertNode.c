@@ -139,6 +139,7 @@ int InsertNode(void **pHead, char which, char *input)
 
 /**
  * Function, that put the input at the end of pHead.
+ * rework this
 */
 int SimpleNodeInsert(void **pHead, char which, void *input)
 {
