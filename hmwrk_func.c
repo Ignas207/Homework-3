@@ -125,6 +125,7 @@ void Searching(Accounts **A, Transactions **T)
 
 int SearchMenu(char *search)
 {
+
     int selection = 0;
     while(1)
     {
@@ -136,7 +137,7 @@ int SearchMenu(char *search)
         printf("    (5) Account Description\n\n");
         printf("Insert your selection: > ");
         scanf("%d", &selection);
-        if(selection > 0 && selection < 5)
+        if(selection > 0 && selection =< 5)
         {
             printf("Insert the search term\n");
             printf("> ");
@@ -152,120 +153,12 @@ int SearchMenu(char *search)
 }
 
 
-/**
- * Function, that will find the node that contains the key.
- * 
- * Parameters:
- *      1. void **node -> our node that we want to search.
- *      2. void **result -> our search result.
- *      3. char *key -> string, that we want to search for in the node.
- *      4. char which -> character, telling which node we supplied:
- *          1) a -> Accounts node
- *          2) t -> Transactions node
- *      5. int position -> if there are multiple results, will output only the one we specify.
- *      6. int skip -> will skip the speccified number of nodes, before comparison begins.
- *      7. int type -> tells what comparison we want to do:
- *          1) 1 -> search the first names,
- *          2) 2 -> seach the last names,
- *          3) 3 -> search the Date,
- *          4) 4 -> search the accountNumber,
- *          5) 5 -> search the description.
- * 
- * Returns:
- *      1. 0 -> No results matching key were found.
- *      2. Positive integer -> found match in this possition.
- **/
-int FindNodebyKey(void **node, void **result, char *key, char which, int position, int skip, int type)
-{
-    /*
-    Transactions *T = NULL;
-    Accounts *A = NULL;
-    int counter = 0;
-    int counter_position = 0;
-    switch(which)
-    {
-        case 'a':
-            A = (Accounts*)*node;
-            while(A != NULL)
-            {
-                counter_position++;
-                if(skip != 0 && counter_position < skip) //on the next iteration we can start from the elements,
-                {                                        //that we have already checked
-                    A = A->pNext;
-                    continue;
-                }
-                switch(type)
-                {
-                    case 1:
-                        if(strncmp(A->fistName, key, strlen(key)) == 0) //firstName comparison
-                            counter++;
-                        break;
-                    case 2:
-                        if(strncmp(A->lastName, key, strlen(key)) == 0) //lastName comparison
-                            counter++;
-                        break;
-                    case 4:
-                        if(strncmp(A->accountNumber, key, strlen(key)) == 0) //accountNumber comparison
-                            counter++;
-                        break;
-                    default:
-                        break;
-                }
-                
-                if(counter == position)
-                {
-                    *result = (void*)A;
-                    return counter_position;
-                }
-                A = A->pNext;
-            }
-            break;
- 
-        case 't':
-            T = (Transactions*)*node;
-            while(T != NULL)
-            {
-                counter_position++; //we do this so we keep track where we are
-                if(skip != 0 && counter_position < skip)    //on the next iteration we can start from the elements,
-                {                                           //that we have already checked
-                    T = T->pNext;
-                    continue;
-                }
-                switch(type)
-                {
-                    case 3:
-                        if(strncmp(T->date, key, strlen(key)) == 0) //date comparison
-                            counter++;
-                        break;
-                    case 4:
-                        if(strncmp(T->accountNumber, key, strlen(key)) == 0) //accountNumber comparison
-                            counter++;
-                        break;
-                    case 5:
-                        if(strncmp(T->description, key, strlen(key)) == 0) //description comparison
-                            counter++;
-                        break;
-                    default:
-                        break;
-                }
-                if(counter == position)
-                {
-                    *result = (void*)T;
-                    return counter_position; //maybe return the position, so we save time on the next iteration
-                }
-                T = T->pNext;
-            }
-            break;
-    }
-    return 0;
-    */
-}
 
-
+/*
 //modify this so we could use 
 void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
 {
-    /*
+    
     Transactions *tempT2 = NULL;
     Transactions *tempT = T;
     Accounts *tempA = NULL;
@@ -331,7 +224,7 @@ void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
         }
         
     }
-    */
+*/
     
     int i = 0;
     switch(which)
@@ -358,7 +251,6 @@ void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
             printf("\nThere are %d elements.\n", i);
             break;
     }
-    
 }
 
 
