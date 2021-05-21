@@ -46,6 +46,7 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
 
 void Searching(Accounts **A, Transactions **T)
 {
+    /*
     int i = 0;
     int counting = 1;
     int amount = 0;
@@ -90,7 +91,7 @@ void Searching(Accounts **A, Transactions **T)
                     (*tempA2) = (*tempA2)->pNext;
                     (*tempA2)->pNext = NULL;
                 }
-                */
+                
                 if(tempA == NULL)
                     MemAlloc((void**)&tempA, 1, 'a');
                 
@@ -119,7 +120,7 @@ void Searching(Accounts **A, Transactions **T)
     }
     amount = i;
 
-
+    */
 }
 
 
@@ -137,7 +138,7 @@ int SearchMenu(char *search)
         printf("    (5) Account Description\n\n");
         printf("Insert your selection: > ");
         scanf("%d", &selection);
-        if(selection > 0 && selection =< 5)
+        if(selection > 0 && selection <= 5)
         {
             printf("Insert the search term\n");
             printf("> ");

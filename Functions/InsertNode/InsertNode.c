@@ -29,7 +29,7 @@ int InsertNode(void **pHead, char which, char *input)
             {
                 while((void*)pTempA != NULL) //searching till we reach the end
                 {
-                    tempA = pTempA->pdataA;
+                    tempA = ((AccountsData*)pTempA->pdataA);
                     if((void*)(tempA) != NULL) //dont have to do this but shure
                     {
                         if(strcmp(tempA2->fistName, tempA->fistName) > 0) //finding at which point our string
@@ -86,7 +86,7 @@ int InsertNode(void **pHead, char which, char *input)
             {
                 while((void*)pTempT != NULL) //searching till we reach the end
                 {
-                    tempT = pTempT->pdataT;
+                    tempT = ((TransactionsData*)pTempT->pdataT);
                     if((void*)(tempA) != NULL) //dont have to do this but shure
                     {
                         if(tempT2->balanceDelta > tempT->balanceDelta) //finding at which point our string
@@ -143,7 +143,6 @@ int InsertNode(void **pHead, char which, char *input)
 */
 int SimpleNodeInsert(void **pHead, char which, void *input)
 {
-    
     Accounts *pHeadA = NULL;
     AccountsData *tempA = NULL;
     Accounts *ptempA = NULL;

@@ -1,9 +1,9 @@
 CFLAGS = -g3 -Wall -Wextra -Wconversion 
 CC = gcc
 
-all: main func reading insertNode createNode
-		$(CC) $(CFLAGS) -o homework3 main.o func.o f_reading.o f_insertNode.o f_createNode.o
-		rm main.o func.o f_reading.o f_insertNode.o f_createNode.o
+all: main func reading insertNode createNode printList findNode
+		$(CC) $(CFLAGS) -o homework3 main.o func.o f_reading.o f_insertNode.o f_createNode.o f_printList.o f_findNode.o
+		rm main.o func.o f_reading.o f_insertNode.o f_createNode.o f_printList.o f_findNode.o
 
 main:
 		$(CC) -c $(CFLAGS) -o main.o hmwrk_main.c
@@ -16,6 +16,12 @@ insertNode:
 
 createNode:
 		$(CC) -c $(CFLAGS) -o f_createNode.o ./Functions/CreateNode/createNode.c
+
+printList:
+		$(CC) -c $(CFLAGS) -o f_printList.o ./Functions/Printlist/printlist.c
+
+findNode:
+		$(CC) -c $(CFLAGS) -o f_findNode.o ./Functions/Searching/findNodebyKey.c
 
 func:
 		$(CC) -c $(CFLAGS) -o func.o hmwrk_func.c

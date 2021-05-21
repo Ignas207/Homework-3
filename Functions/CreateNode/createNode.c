@@ -31,7 +31,7 @@ int CreateNode(void **node, char which, char *input)
         case 'a':
             if(MemAlloc(node, 1, 'a'))
             {
-                tempA = (Accounts*)*node;
+                tempA = (AccountsData*)*node;
                 for(i = 1; i <= LEN_ACCOUNTS; i++)
                 {
                     result = ExtractString(input, temp, i); //extracting the string
@@ -85,7 +85,7 @@ int CreateNode(void **node, char which, char *input)
         case 't':
             if(MemAlloc(node, 1, 't'))
             {
-                tempT = (Transactions*)*node;
+                tempT = (TransactionsData*)*node;
                 for(i = 1; i <= LEN_TRANSACTIONS; i++)
                 {
                     result = ExtractString(input, temp, i);

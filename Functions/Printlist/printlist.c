@@ -18,6 +18,7 @@ void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
             printf("Account balance: %.2f\n", tempA->balance);
             printf("Account number: %c[1m%s%c[0m\n", ESC, tempA->accountNumber, ESC);
             //search function here
+            i = 1;
             while(T != 0)
             {
                 //tempT = ((TransactionsData*)(T->pdataT));
