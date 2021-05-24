@@ -25,11 +25,6 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
     int i = 0;
     int result = 0;
 
-    if(inputAccounts == NULL)           //maybe this is unnesesary
-        inputAccounts = FILE_INPUT_ACCOUNT;
-    if(inputTransactions == NULL)
-        inputTransactions = FILE_INPUT_TRANSACTIONS;
-
     FILE *fInputAccounts = NULL;
     FILE *fInputTransactions = NULL;
 

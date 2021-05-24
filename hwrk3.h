@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ACCOUNT_DIGEST_LEN 20
-#define TRANSACTION_DIGEST_LEN 42
+#define ACCOUNT_DIGEST_LEN 19
+#define TRANSACTION_DIGEST_LEN 40
 #define LEN_TEMP 300
 
 #define ESC 27

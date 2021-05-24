@@ -33,6 +33,7 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
 
     int counter = 0;
     int counter_position = 0;
+    size_t keySize = strlen(key);
 
     switch (which)
     {
@@ -51,15 +52,15 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
                 switch(type)
                 {
                     case 1:
-                        if(strncmp(tempA->fistName, key, strlen(key) == 0)) //firstName comparison
+                        if(strncmp(tempA->fistName, key, keySize) == 0) //firstName comparison
                             counter++;
                         break;
                     case 2:
-                        if(strncmp(tempA->lastName, key, strlen(key)) == 0) //lastName comparison
+                        if(strncmp(tempA->lastName, key, keySize) == 0) //lastName comparison
                             counter++;
                         break;
                     case 4:
-                        if(strncmp(tempA->accountNumber, key, strlen(key)) == 0) //accountNumber comparison
+                        if(strncmp(tempA->accountNumber, key, keySize) == 0) //accountNumber comparison
                             counter++;
                         break;
                     default:
@@ -88,21 +89,21 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
                 switch(type)
                 {
                     case 3:
-                        if(strncmp(tempT->date, key, strlen(key)) == 0) //date comparison
+                        if(strncmp(tempT->date, key, keySize) == 0) //date comparison
                             counter++;
                         break;
                     case 4:
-                        if(strncmp(tempT->accountNumber, key, strlen(key)) == 0) //accountNumber comparison
+                        if(strncmp(tempT->accountNumber, key, keySize) == 0) //accountNumber comparison
                             counter++;
                         break;
                     case 5:
-                        if(strncmp(tempT->description, key, strlen(key)) == 0)
+                        if(strncmp(tempT->description, key, keySize) == 0)
                             counter++;
                         break;
                     default:
                         break;
                 }
-                if(counter == counter_position)
+                if(counter == position)
                 {
                     *result = (void*)tempT;
                     return counter_position;    //maybe return the position, so we save time on the next iteration

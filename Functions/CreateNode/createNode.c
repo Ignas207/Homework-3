@@ -114,7 +114,7 @@ int CreateNode(void **node, char which, char *input)
                             break;
 
                         case 4:
-                            if(MemAlloc((void*)&tempT->time, (int)strlen(temp) +1, 'c'))
+                            if(MemAlloc((void*)&tempT->time, (int)strlen(temp) +1, 'c')) //why are we alocating so much memory?
                                 strncpy(tempT->time, temp, strlen(temp));
                             else
                                 error = 1;

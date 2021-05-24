@@ -46,6 +46,7 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
 
 void Searching(Accounts **A, Transactions **T)
 {
+    
     /*
     int i = 0;
     int counting = 1;

@@ -2,7 +2,9 @@
 
 void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
 {
+    Accounts* ptempA = NULL;
     AccountsData *tempA = NULL;
+    Transactions *ptempT = NULL;
     TransactionsData *tempT = NULL;
     TransactionsData *tempT2 = NULL;
     int i = 1;
@@ -11,15 +13,18 @@ void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
 
     if(type == 0) //default config to print everything
     {
-        while(A->pNext != NULL)
+        ptempA = A;
+        while(ptempA->pNext != NULL)
         {
-            tempA = ((AccountsData*)(A->pdataA));
+            tempA = ((AccountsData*)(ptempA->pdataA));
             printf("Name: %s %s\n", tempA->fistName, tempA->lastName);
             printf("Account balance: %.2f\n", tempA->balance);
             printf("Account number: %c[1m%s%c[0m\n", ESC, tempA->accountNumber, ESC);
             //search function here
+            ptempT = T;
             i = 1;
-            while(T != 0)
+            counting_position = 0;
+            while(ptempT != 0)
             {
                 //tempT = ((TransactionsData*)(T->pdataT));
                 temp_pos = FindNodebyKey((void*)&T, (void**)&tempT2, tempA->accountNumber, 't', i, counting_position, 4);
@@ -34,9 +39,37 @@ void PrintList(Accounts *A, Transactions *T, char which, int type, char *key)
                     printf("    Description: %s\n\n", tempT2->description);
                     i++;
                 }
-                T = T->pNext;
+                ptempT = ptempT->pNext;
             }
-            A = A->pNext;
+            ptempA = ptempA->pNext;
+        }
+    }
+    else
+    {
+        int i = 0;
+        switch(which)
+        {
+            case 'a':
+                //A = (Accounts*)node;
+                while((void*)A != NULL)
+                {
+                    PrintNode((void*)A, 'a');
+                    A = A->pNext;
+                    i++;
+                }
+                printf("\nThere are %d elements.\n", i);
+                break;
+            
+            case 't':
+                //T = (Transactions*)node;
+                while((void*)T != NULL)
+                {
+                    PrintNode((void*)T, 't');
+                    T = T->pNext;
+                    i++;
+                }
+                printf("\nThere are %d elements.\n", i);
+                break;
         }
     }
     /*

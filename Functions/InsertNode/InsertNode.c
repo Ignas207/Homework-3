@@ -87,7 +87,7 @@ int InsertNode(void **pHead, char which, char *input)
                 while((void*)pTempT != NULL) //searching till we reach the end
                 {
                     tempT = ((TransactionsData*)pTempT->pdataT);
-                    if((void*)(tempA) != NULL) //dont have to do this but shure
+                    if((void*)(tempT) != NULL) //dont have to do this but shure
                     {
                         if(tempT2->balanceDelta > tempT->balanceDelta) //finding at which point our string
                         {                                                 //is larger than the rest of the node
