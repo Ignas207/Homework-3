@@ -108,13 +108,13 @@ int CreateNode(void **node, char which, char *input)
                         
                         case 3:
                             if(MemAlloc((void*)&tempT->date, (int)strlen(temp) +1, 'c'))
-                                strncpy(tempT->date, temp, (size_t)strlen(temp));
+                                strncpy(tempT->date, temp, strlen(temp));
                             else
                                 error = 1;
                             break;
 
                         case 4:
-                            if(MemAlloc((void*)&tempT->time, (int)strlen(temp) +1, 'c')) //why are we alocating so much memory?
+                            if(MemAlloc((void*)&tempT->time, (int)strlen(temp) +1, 'c'))
                                 strncpy(tempT->time, temp, strlen(temp));
                             else
                                 error = 1;

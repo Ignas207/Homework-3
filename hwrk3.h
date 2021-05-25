@@ -49,14 +49,14 @@ typedef struct
     float balanceDelta;
 } TransactionsData;
 
-void Searching(Accounts **A, Transactions **T);
+void NodeSelect(Accounts *A, Transactions *T);
 int SearchMenu(char *search);
 void Menu(Accounts **A, Transactions **T, int amountA, int amountT); //working on it
 
 void ReadError(int condintion, int line, int amount); //done?
 
 void PrintNode(void *node, char which); //done
-void PrintList(Accounts *A, Transactions *T, char which, int type, char *key); //done
+void PrintList(Accounts *A, Transactions *T);
 
 int SimpleNodeInsert(void **pHead, char which, void *input);
 
@@ -65,8 +65,10 @@ int InsertNode(void **pHead, char which, char *input); //done
 int FindNodebyKey(void **node, void **result, char *key, char which, int position, int skip, int type); //done
 int CreateNode(void **node, char which, char *input); //done
 
+/*
 void RemoveNodeByKey(void **pHead, char *key, char which);
 void RemoveNodeByID(void **pHead, int id, char which);
+*/
 
 int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTransactions, int *amountA, int *amountT); //done
 int MemAlloc(void **data, int amount, char type); //done

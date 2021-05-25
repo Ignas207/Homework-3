@@ -26,11 +26,11 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
                 break;
             case 2:
                 printf("\nSelected: Display all of the read results\n\n");
-                PrintList(*A, *T, 'a', 0, "");
+                PrintList(*A, *T);
                 break;
             case 3:
                 printf("\nSelected: Display a speciffic account\n\n");
-                Searching(A, T);
+                NodeSelect(A, T);
                 break;
             case 0:
                 printf("\nExiting the program...\n");
@@ -44,9 +44,10 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
 }
 
 
+/*
 void Searching(Accounts **A, Transactions **T)
 {
-    
+
     /*
     int i = 0;
     int counting = 1;
@@ -121,38 +122,9 @@ void Searching(Accounts **A, Transactions **T)
     }
     amount = i;
 
-    */
+    
 }
-
-
-int SearchMenu(char *search)
-{
-
-    int selection = 0;
-    while(1)
-    {
-        printf("How would you like to search?\n");
-        printf("    (1) First name\n");
-        printf("    (2) Last name\n");
-        printf("    (3) Date\n");
-        printf("    (4) Account number\n");
-        printf("    (5) Account Description\n\n");
-        printf("Insert your selection: > ");
-        scanf("%d", &selection);
-        if(selection > 0 && selection <= 5)
-        {
-            printf("Insert the search term\n");
-            printf("> ");
-            scanf("%s", search);
-            return selection;
-        }
-        else
-        {
-            printf("Choice %d is invalid!\n", selection);
-            printf("Please select a valid entry!\n\n");
-        }
-    }
-}
+/*
 
 void PrintNode(void *node, char which)
 {
@@ -199,6 +171,7 @@ void PrintNode(void *node, char which)
             
     }
 }
+*/
 
 
 /**

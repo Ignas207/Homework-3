@@ -56,7 +56,7 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
         }
         i++;
     }
-    //PrintList(*A, *T, 'a', 1, "1");
+
     *amountA = i;
     i = 0;
     fclose(fInputAccounts);
@@ -72,7 +72,6 @@ int Reading(Accounts **A, Transactions **T, char *inputAccounts, char *inputTran
         }
         i++;
     }
-    //PrintList(*A, *T, 't', 1, "1");
 
     *amountT = i;
     fclose(fInputTransactions);
