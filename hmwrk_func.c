@@ -30,7 +30,7 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
                 break;
             case 3:
                 printf("\nSelected: Display a speciffic account\n\n");
-                NodeSelect(A, T);
+                NodeSelect(*A, *T);
                 break;
             case 0:
                 printf("\nExiting the program...\n");
@@ -124,54 +124,62 @@ void Searching(Accounts **A, Transactions **T)
 
     
 }
-/*
+*/
 
 void PrintNode(void *node, char which)
 {
-    
-    Accounts *A = NULL;
-    Transactions *T = NULL;
+    AccountsData *A = NULL;
+    TransactionsData *T = NULL;
 
     switch(which)
     {
         case 'a':
-            A = (Accounts*)node;
+            A = (AccountsData*)node;
             if(A == NULL)
             {
                 printf("Node is NULL!\n");
                 return;
             }
-            printf("\nNode %p:\n", (void*)A);
-            printf("    firstName: %s\n", ((AccountsData*)(A->pdataA))->fistName);
-            printf("    lastName: %s\n", ((AccountsData*)(A->pdataA))->lastName);
-            printf("    balance: %.2f\n", ((AccountsData*)(A->pdataA))->balance);
-            printf("    accountNumber: %s\n", ((AccountsData*)(A->pdataA))->accountNumber);
-            printf("    pNext: %p\n", A->pNext);
-            printf("    Previous: %p\n", A->pPrev);
+            //printf("\nNode %p:\n", (void*)A);
+            printf("    First Name: %s\n", A->fistName);
+            printf("    Last Name: %s\n", A->lastName);
+            printf("    Account Balance: %.2f\n", A->balance);
+            printf("    Account Number: %s\n", A->accountNumber);
             break;
 
         
         case 't':
-            T = (Transactions*)node;
+            T = (TransactionsData*)node;
             if(T == NULL)
             {
                 printf("Node is NULL!\n");
                 return;
             }
-            printf("\nNode %p:\n", (void*)T);
-            printf("    transactionID: %s\n", ((TransactionsData*)(T->pdataT))->transactionID);
-            printf("    accountNumber: %s\n", ((TransactionsData*)(T->pdataT))->accountNumber);
-            printf("    date: %s\n", ((TransactionsData*)(T->pdataT))->date);
-            printf("    time: %s\n", ((TransactionsData*)(T->pdataT))->time);
-            printf("    description: %s\n", ((TransactionsData*)(T->pdataT))->description);
-            printf("    balanceDelta: %.2f\n", ((TransactionsData*)(T->pdataT))->balanceDelta);
-            printf("    pNext: %p\n", T->pNext);
-            printf("    pPrev: %p\n", T->pPrev);
+            printf("    TransactionID: %s\n", T->transactionID);
+            printf("    Account Number: %s\n", T->accountNumber);
+            printf("    Date: %s\n", T->date);
+            printf("    Time: %s\n", T->time);
+            printf("    Description: %s\n", T->description);
+            printf("    BalanceDelta: %.2f\n", T->balanceDelta);
             break;
-            
     }
 }
-*/
+
+
+int GetInRange(int min, int max)
+{
+    int num = 0;
+    while(1)
+    {
+        printf("\n > ");
+        scanf("%d", &num);
+        if(num >= min && num <= max)
+            return num;
+
+        printf("\nSelection %d is invalid!", num);
+        printf("Please insert a valid choice!\n");
+    }
+}
 
 
 /**
@@ -240,19 +248,19 @@ void ReadError(int condintion, int line, int amount)
 //will memclear the node
 void Unload(void **node, char which)
 {
-    /*
-    Accounts *tempA = NULL;
-    Transactions *tempT = NULL;
+    
+    AccountsData *tempA = NULL;
+    TransactionsData *tempT = NULL;
     switch(which)
     {
         case 'a':
-            tempA = (Accounts*)*node;
+            tempA = (AccountsData*)*node;
             SafeFree((void*)&tempA->fistName);
             SafeFree((void*)&tempA->lastName);
             SafeFree((void**)&tempA);
             break;
         case 't':
-            tempT = (Transactions*)*node;
+            tempT = (TransactionsData*)*node;
             SafeFree((void*)&tempT->date);
             SafeFree((void*)&tempT->time);
             SafeFree((void*)&tempT->description);
@@ -261,7 +269,7 @@ void Unload(void **node, char which)
         default:
             break;
     }
-    */
+    
 }
 
 
@@ -275,8 +283,10 @@ void Unload(void **node, char which)
  *                      1) i -> int
  *                      2) f -> float
  *                      3) c -> char
- *                      4) a -> Accounts structure
- *                      5) t -> Transactions structure
+ *                      4) a -> AccountsData structure
+ *                      5) t -> TransactionsData structure
+ *                      6) A -> Accounts structure
+ *                      7) T -> transactions structure
  *
  *  Returns:        1) 0 -> allocation failed
  *                  2) 1 -> allocation suceeded
@@ -395,7 +405,8 @@ void MemFree(void **data, char which)
             while((void*)A != NULL)
             {
                 temp = (void*)A->pNext;
-                Unload((void**)&A, 'a');
+                Unload((void**)&(A->pdataA), 'a');
+                SafeFree((void**)&A);
                 A = (Accounts*)temp;
             }
             break;
@@ -405,7 +416,8 @@ void MemFree(void **data, char which)
             while((void*)T != NULL)
             {
                 temp = (void*)T->pNext;
-                Unload((void**)&T, 't');
+                Unload((void**)&(T->pdataT), 't');
+                SafeFree((void**)&T);
                 T = (Transactions*)temp;
             }
             break;

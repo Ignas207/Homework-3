@@ -10,7 +10,7 @@ int main(void)
     Reading(&A, &T, FILE_INPUT_ACCOUNT, FILE_INPUT_TRANSACTIONS, &amountA, &amountT);
     Menu(&A, &T, amountA, amountT);
 
-    //MemFree((void**)&A, 'a');
-    //MemFree((void**)&T, 't');
+    MemFree((void**)&A, 'a');
+    MemFree((void**)&T, 't');
     return 0;
 }

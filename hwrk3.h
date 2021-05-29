@@ -60,6 +60,7 @@ void PrintList(Accounts *A, Transactions *T);
 
 int SimpleNodeInsert(void **pHead, char which, void *input);
 
+int GetInRange(int min, int max);
 void Unload(void **node, char which); //done
 int InsertNode(void **pHead, char which, char *input); //done
 int FindNodebyKey(void **node, void **result, char *key, char which, int position, int skip, int type); //done

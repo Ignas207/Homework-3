@@ -42,7 +42,7 @@ int FindNodebyKey(void **node, void **result, char *key, char which, int positio
             while(A != NULL)
             {
                 counter_position++; //we do this so we keep track where we are
-                if(skip != 0 && counter_position < skip) //on the next iteration we can start from the elements,
+                if(skip != 0 && counter_position <= skip) //on the next iteration we can start from the elements,
                 {                                        //that we have already checked
                     A = A->pNext;
                     continue;
