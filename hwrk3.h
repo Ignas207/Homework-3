@@ -50,6 +50,8 @@ typedef struct
     float balanceDelta;
 } TransactionsData;
 
+
+void NodeEdit();
 void NodeSelect(Accounts *A, Transactions *T, int edit);
 int SearchMenu(char *search);
 void Menu(Accounts **A, Transactions **T, int amountA, int amountT); //working on it

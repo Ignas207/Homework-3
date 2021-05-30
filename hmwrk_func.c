@@ -12,7 +12,7 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
     puts("If you are unsure what options are available, type '1'!");
     while(1)
     {
-        choice = GetInRange(1, 5);
+        choice = GetInRange(0, 5);
         fflush(stdout);
         switch(choice)
         {
@@ -40,7 +40,7 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
             case 4:
                 puts("Selected: Edit a speciffic account");
                 puts("");
-                
+                NodeSelect(*A, *T, 1);
                 break;
             case 0:
                 printf("\nExiting the program...\n");
@@ -183,7 +183,7 @@ int ConfirmationBox(char *message, int yes, int no)
     setlinebuf(stdout);
     //Yeah I have no idea whats going on here.
     //Copied this whole thing into another folder for testing.
-    //And it worked perfecally...
+    //And it worked perfeclly...
     //TLDR: select always reads '\n', withouth the users input.
     char select = '\0';
     char temp[LEN_CONF] = {'\0'};

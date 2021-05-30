@@ -102,12 +102,8 @@ void NodeSelect(Accounts *A, Transactions *T, int edit)
             }
         }
 
-        y = 3; //remove this once ConfirmationBox is working
         while(1)
         {
-            if(y == 0) //remove this once ConfirmationBox is working
-                break;
-
             printf("\nWhich name would you like to view?\n");
             printf("Type %c[1m%s%c[0m to cancel.\n", ESC, "-1", ESC);
             i = GetInRange(-1, counting -1);
@@ -118,14 +114,8 @@ void NodeSelect(Accounts *A, Transactions *T, int edit)
                 break;
             }
             PrintNode((void*)*(tempD + i), 'a');
- 
-            printf("WARNING: Borked feature!\n"); //remove this once ConfirmationBox is working
-            printf("Will exit after %d iterations!\n", y); //remove this once ConfirmationBox is working
-
-            if(ConfirmationBox("Would you like to view another node?", 1, 0) == 0)
+            if(ConfirmationBox("Would you like to view another node?", 1, 0) == 0) //this works, but not how I want it to work
                 break;
-
-            y--; //remove this once ConfirmationBox is working
         }
         SafeFree((void**)&tempD);
     }
@@ -161,8 +151,8 @@ void NodeSelect(Accounts *A, Transactions *T, int edit)
         if(i == 0)
         {
             printf("\nNo results matching %c[1m%s%c[0m were found!\n", ESC, key, ESC);
-            //if(tempD )
-            //SafeFree((void**)&tempD); //we have to, but it crashed, because of a double free?
+            //SafeFree((void**)&tempD); //we have to free this, as we have allocated memory.
+                                        //but then it crashes because of a double free?
             return;
         }
         
@@ -183,12 +173,8 @@ void NodeSelect(Accounts *A, Transactions *T, int edit)
             }
         }
 
-        y = 3; //remove this once ConfirmationBox is working
         while(1)
         {
-            if(y == 0) //remove this once ConfirmationBox is working
-                break;
-
             printf("\nWhich node would you like to view?\n");
             printf("Type %c[1m%s%c[0m to cancel.\n", ESC, "-1", ESC);
             i = GetInRange(-1, counting -1);
@@ -199,15 +185,11 @@ void NodeSelect(Accounts *A, Transactions *T, int edit)
                 break;
             }
             
-            PrintNode((void*)*(tempD + i), 'a');
+            PrintNode((void*)*(tempT + i), 't');
 
-            //printf("WARNING: Borked feature!\n"); //remove this once ConfirmationBox is working
-            //printf("Will exit after %d iterations!\n", y); //remove this once ConfirmationBox is working
-
-            if(ConfirmationBox("Would you like to view another node?", 1, 0) == 0) //this is broken
+            if(ConfirmationBox("Would you like to view another node?", 1, 0) == 0) //this works, but not how I want it to work
                 break;
 
-            y--; //remove this once ConfirmationBox is working
         }
         SafeFree((void**)&tempT);
     }
