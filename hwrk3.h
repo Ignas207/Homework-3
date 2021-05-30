@@ -55,6 +55,8 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT); //working o
 
 void ReadError(int condintion, int line, int amount); //done?
 
+int ConfirmationBox(char *message, int yes, int no);
+
 void PrintNode(void *node, char which); //done
 void PrintList(Accounts *A, Transactions *T);
 

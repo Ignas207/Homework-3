@@ -176,7 +176,7 @@ int GetInRange(int min, int max)
         if(num >= min && num <= max)
             return num;
 
-        printf("\nSelection %d is invalid!", num);
+        printf("\nSelection %d is invalid!\n", num);
         printf("Please insert a valid choice!\n");
     }
 }
@@ -241,6 +241,64 @@ void ReadError(int condintion, int line, int amount)
     {
         printf("Exception occured when reading %d line:\n", line);
         printf("    Memory allocation failed for the %d element!\n", condintion*(-1));
+    }
+}
+
+
+int ConfirmationBox(char *message, int yes, int no)
+{
+    //this is currently broken
+    char tempC = '\0';
+    char temp[LEN_TEMP] = {'\0'};
+    printf("\n%s ", message);
+    if(yes == 1 && no == 0)
+        printf("(Y/n)\n > "); //I have tryed putting it there
+    else if(yes == 0 && no == 1)
+        printf("(y/N)\n > "); 
+    else
+        printf("(y/n)\n > ");
+
+    //printf(" > "); //for some unknown reason it dosent print this before scanf
+    //puts()
+    //fgets
+    //puts(" > ");   //gdb shows nothing, one moment tempC is '\0', then its '\n'.
+    
+    while(1)
+    {
+        //tempC = '\0';
+        //printf(" > ");
+        scanf("%c", &tempC); //and reads the \n character every time
+        
+        //printf("\n");
+        if(yes == 1 && no == 0)
+        {
+            if(tempC == 'Y' || tempC == 'y' || tempC == '\n')
+                return 1;
+            else if(tempC == 'n' || tempC == 'N')
+                return 0;
+        }
+        else if(yes == 0 &&  no == 1)
+        {
+            if(tempC == 'N' || tempC == 'n' || tempC == '\n')
+                return 0;
+            else if(tempC == 'y' || tempC == 'Y')
+                return 1;
+        }
+        else
+        {
+            if(tempC == 'N' || tempC == 'n')
+                return 0;
+            else if(tempC == 'y' || tempC == 'Y')
+                return 1;
+        }
+        printf("Choice %c was not understood!\n", tempC);
+        printf("\nPlease input a valid choice! ");
+        if(yes == 1 && no == 0)
+            printf("(Y/n)\n > ");
+        else if(yes == 0 && no == 1)
+            printf("(y/N)\n > ");
+        else
+            printf("(y/n)\n > ");
     }
 }
 

@@ -35,17 +35,17 @@ int SearchMenu(char *search)
 void NodeSelect(Accounts *A, Transactions *T)
 {
     char key[LEN_TEMP] = {'\0'};
-    char tempC = '\0';
     int type = SearchMenu(&key);
     int counting = 1;
     int pos = 0;
     int posT = 1;
     int i = 0;
+    int y = 0;
     int counting_alloc = 1;
     size_t keySize = strlen(key);
 
     AccountsData **tempD = NULL;
-    TransactionsData *tempT = NULL;
+    TransactionsData **tempT = NULL;
     void *temp = NULL;
 
     if(type == 1 || type == 2 || type == 4)
@@ -81,7 +81,7 @@ void NodeSelect(Accounts *A, Transactions *T)
         {
             printf("\nNo results matching %c[1m%s%c[0m were found!\n", ESC, key, ESC);
             //if(tempD )
-            //SafeFree((void**)&tempD); //maybe?
+            //SafeFree((void**)&tempD); //we have to, but it crashed, because of a double free?
             return;
         }
         
@@ -102,18 +102,107 @@ void NodeSelect(Accounts *A, Transactions *T)
             }
         }
 
+        y = 3;
         while(1)
         {
-            printf("\nWhich name would you like to view?\n");
-            i = GetInRange(0, counting -1);
-            printf("\n");
-            PrintNode((void*)*(tempD + i), 'a');
-            printf("\nWould you like to view another node? (Y/n)\n");
-            printf(" > ");
-            scanf("%c", &tempC);
-            if(tempC == 'n' || tempC == 'N')
+            if(y == 0) //remove this once ConfirmationBox is working
                 break;
+
+            printf("\nWhich name would you like to view?\n");
+            printf("Type %c[1m%s%c[0m to cancel.\n", ESC, "-1", ESC);
+            i = GetInRange(-1, counting -1);
+            printf("\n");
+            if(i == -1)
+                break;
+            PrintNode((void*)*(tempD + i), 'a');
+
+            printf("WARNING: Borked feature!\n");
+            printf("Will exit after %d iterations!\n", y);
+
+            if(ConfirmationBox("Would you like to view another node?", 1, 0) == 0)
+                break;
+
+            y--;
         }
         SafeFree((void**)&tempD);
+    }
+    else if(type == 3 || type == 5)
+    {
+        if(MemAlloc((void**)&tempT, counting_alloc, 't') == 0)
+        {
+            printf("Searching failled!\n");
+            printf("Could not allocate memory!\n\n");
+            return;
+        }
+
+        while(posT != 0) //this is probably not good as we may miss some things?
+        {
+            posT = FindNodebyKey((void**)&T, &temp, key, 't', counting, pos, type); //finding the data structure
+            if(posT != 0)
+            {
+                if(counting_alloc <= i)
+                {
+                    if(MemAlloc((void**)&tempT, counting_alloc*2, 'a')) //allocating memory for pointer array.
+                        counting_alloc *= 2;
+                }
+
+                if(i < counting_alloc)
+                {
+                    *(tempT +i) = (TransactionsData*)temp; //saving the data pointer.
+                    i++;
+                }
+                pos = posT;
+            }
+        }
+        MemAlloc((void**)&tempT, i, 'a');
+        if(i == 0)
+        {
+            printf("\nNo results matching %c[1m%s%c[0m were found!\n", ESC, key, ESC);
+            //if(tempD )
+            //SafeFree((void**)&tempD); //we have to, but it crashed, because of a double free?
+            return;
+        }
+        
+        printf("\nResults mathching %c[1m%s%c[0m:\n", ESC, key, ESC);
+        for(counting = i, i = 0; i < counting; i++)
+        {
+            switch(type)
+            {
+                case 3:
+                    printf("    (%d) %c[1m%s%c[0m%s\n", i, ESC, key, ESC, &(*((*(tempT +i))->date + strlen(key)))); //date
+                    break;
+                case 4:
+                    printf("    (%d) %c[1m%s%c[0m%s\n", i, ESC, key, ESC, &(*((*(tempT +i))->accountNumber + strlen(key)))); //accountNumber
+                    break;
+                case 5:
+                    printf("    (%d) %c[1m%s%c[0m%s\n", i, ESC, key, ESC, &(*((*(tempT +i))->description + strlen(key)))); //accountDescription
+                    break;
+            }
+        }
+
+        y = 3;
+        while(1)
+        {
+            if(y == 0)
+                break;
+
+            tempC = '\0';
+            printf("\nWhich node would you like to view?\n");
+            printf("Type %c[1m%s%c[0m to cancel.\n", ESC, "-1", ESC);
+            i = GetInRange(-1, counting -1);
+            printf("\n");
+            if(i == -1)
+                break;
+            
+            PrintNode((void*)*(tempD + i), 'a');
+
+            printf("WARNING: Borked feature!\n");
+            printf("Will exit after %d iterations!\n", y);
+
+            if(ConfirmationBox("Would you like to view another node?", 1, 0) == 0) //this is broken
+                break;
+            y--;
+        }
+        SafeFree((void**)&tempT);
     }
 }
