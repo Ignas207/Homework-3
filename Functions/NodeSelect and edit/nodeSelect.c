@@ -32,7 +32,7 @@ int SearchMenu(char *search)
 }
 
 
-void NodeSelect(Accounts *A, Transactions *T)
+void NodeSelect(Accounts *A, Transactions *T, int edit)
 {
     char key[LEN_TEMP] = {'\0'};
     int type = SearchMenu(&key);
@@ -102,7 +102,7 @@ void NodeSelect(Accounts *A, Transactions *T)
             }
         }
 
-        y = 3;
+        y = 3; //remove this once ConfirmationBox is working
         while(1)
         {
             if(y == 0) //remove this once ConfirmationBox is working
@@ -113,16 +113,19 @@ void NodeSelect(Accounts *A, Transactions *T)
             i = GetInRange(-1, counting -1);
             printf("\n");
             if(i == -1)
+            {
+                printf("Exiting: Display a speciffic account...");
                 break;
+            }
             PrintNode((void*)*(tempD + i), 'a');
-
-            printf("WARNING: Borked feature!\n");
-            printf("Will exit after %d iterations!\n", y);
+ 
+            printf("WARNING: Borked feature!\n"); //remove this once ConfirmationBox is working
+            printf("Will exit after %d iterations!\n", y); //remove this once ConfirmationBox is working
 
             if(ConfirmationBox("Would you like to view another node?", 1, 0) == 0)
                 break;
 
-            y--;
+            y--; //remove this once ConfirmationBox is working
         }
         SafeFree((void**)&tempD);
     }
@@ -180,28 +183,31 @@ void NodeSelect(Accounts *A, Transactions *T)
             }
         }
 
-        y = 3;
+        y = 3; //remove this once ConfirmationBox is working
         while(1)
         {
-            if(y == 0)
+            if(y == 0) //remove this once ConfirmationBox is working
                 break;
 
-            tempC = '\0';
             printf("\nWhich node would you like to view?\n");
             printf("Type %c[1m%s%c[0m to cancel.\n", ESC, "-1", ESC);
             i = GetInRange(-1, counting -1);
             printf("\n");
             if(i == -1)
+            {
+                printf("Exiting: Display a speciffic account...");
                 break;
+            }
             
             PrintNode((void*)*(tempD + i), 'a');
 
-            printf("WARNING: Borked feature!\n");
-            printf("Will exit after %d iterations!\n", y);
+            //printf("WARNING: Borked feature!\n"); //remove this once ConfirmationBox is working
+            //printf("Will exit after %d iterations!\n", y); //remove this once ConfirmationBox is working
 
             if(ConfirmationBox("Would you like to view another node?", 1, 0) == 0) //this is broken
                 break;
-            y--;
+
+            y--; //remove this once ConfirmationBox is working
         }
         SafeFree((void**)&tempT);
     }

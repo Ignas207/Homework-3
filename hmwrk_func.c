@@ -9,28 +9,38 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
     Accounts *tempA = *A;
     Transactions *tempT = *T;
     printf("Welcome to the program!\n\n");
-    printf("If you are unsure what options are available, type '1'!\n");
+    puts("If you are unsure what options are available, type '1'!");
     while(1)
     {
-        printf("> ");
-        scanf("%d", &choice);
+        choice = GetInRange(1, 5);
+        fflush(stdout);
         switch(choice)
         {
             case 1:
-                printf("\nAvailable commands:\n");
-                printf("    1 -> Display this help message\n");
-                printf("    2 -> Display all of the read results\n");
-                printf("    3 -> Display a speciffic account name\n");
-                printf("    4 -> Edit a speciffic account\n");
-                printf("    0 -> Exit the program\n\n");
+                puts("");
+                puts("Available commands:");
+                puts("    1 -> Display this help message");
+                puts("    2 -> Display all of the read results");
+                puts("    3 -> Display a speciffic account name");
+                puts("    4 -> Edit a speciffic account");
+                puts("    0 -> Exit the program");
+                puts("");
                 break;
             case 2:
-                printf("\nSelected: Display all of the read results\n\n");
+                puts("");
+                puts("Selected: Display all of the read results");
+                puts("");
                 PrintList(*A, *T);
                 break;
             case 3:
-                printf("\nSelected: Display a speciffic account\n\n");
-                NodeSelect(*A, *T);
+                puts("Selected: Display a speciffic account");
+                puts("");
+                NodeSelect(*A, *T, 0);
+                break;
+            case 4:
+                puts("Selected: Edit a speciffic account");
+                puts("");
+                
                 break;
             case 0:
                 printf("\nExiting the program...\n");
@@ -43,88 +53,6 @@ void Menu(Accounts **A, Transactions **T, int amountA, int amountT)
     }
 }
 
-
-/*
-void Searching(Accounts **A, Transactions **T)
-{
-
-    /*
-    int i = 0;
-    int counting = 1;
-    int amount = 0;
-    Accounts **tempA = NULL;
-    Accounts **tempA2 = NULL;
-    Transactions **tempT = NULL;
-    Accounts *At = *A;
-    Transactions *Tt = *T;
-    void *temp1 = NULL;
-    char key[LEN_TEMP] = {'\0'};
-    int pos = 0;
-    int posT = 0;
-    int type = SearchMenu(key);
-
-    if(type == 1 || type == 2 || type == 4)
-    {
-        //A = (Accounts*)*node;
-        while((void*)At != NULL)
-        {
-            //MemAlloc((void**)&tempA, );
-            //*(tempA + i) = NULL;
-            posT = FindNodebyKey((void**)&At, &temp1, key, 'a', counting, pos, type);
-            if(posT != 0)
-            {
-                /*
-                if(tempA == NULL) //constructing a temp node for our answers
-                {
-                    MemAlloc((void**)&tempA, 1, 'a');
-                    MemAlloc((void**)tempA, (int)sizeof((Accounts*)temp1), 'a');
-                    memcpy(*tempA, (Accounts*)temp1, sizeof(**tempA));
-                    //*tempA = (Accounts*)temp1;
-                    (*tempA)->pNext = NULL;
-                    //tempA2 = tempA;
-                }
-                else
-                {
-                    while((*tempA2)->pNext != NULL) //finding the end
-                        (*tempA2) = (*tempA2)->pNext;
-                    MemAlloc((void**)&(*tempA2)->pNext, (int)sizeof((Accounts*)temp1), 'a');
-                    memcpy((*tempA2)->pNext, (Accounts*)temp1, sizeof(*(*tempA2)->pNext));
-                    //(*tempA)->pNext = (Accounts*)temp1;
-                    (*tempA2) = (*tempA2)->pNext;
-                    (*tempA2)->pNext = NULL;
-                }
-                
-                if(tempA == NULL)
-                    MemAlloc((void**)&tempA, 1, 'a');
-                
-                SimpleNodeInsert((void**)tempA, 'a', temp1);
-                pos = posT;
-                i++;
-                
-            }
-            At = At->pNext;
-        }
-        PrintList(*tempA, *T, 'a', type, key);
-    } //fix this
-    else if(type == 3 || type == 5)
-    {
-        //T = (Transactions*)*node;
-        if((void*)T != NULL)
-        {
-            posT = FindNodebyKey((void*)Tt, (void**)(*tempT + i), key, 't', counting, pos, type);
-            if(posT != 0)
-            {
-                pos = posT;
-                i++;
-            }
-            Tt = Tt->pNext;
-        }
-    }
-    amount = i;
-
-    
-}
-*/
 
 void PrintNode(void *node, char which)
 {
@@ -169,15 +97,20 @@ void PrintNode(void *node, char which)
 int GetInRange(int min, int max)
 {
     int num = 0;
+    //char *temp[LEN_CONF] = {'\0'};
     while(1)
     {
         printf("\n > ");
+        fflush(stdout);
+
         scanf("%d", &num);
+        //fflush(stdout);
         if(num >= min && num <= max)
             return num;
 
         printf("\nSelection %d is invalid!\n", num);
         printf("Please insert a valid choice!\n");
+        num = min - 1;
     }
 }
 
@@ -247,58 +180,63 @@ void ReadError(int condintion, int line, int amount)
 
 int ConfirmationBox(char *message, int yes, int no)
 {
-    //this is currently broken
-    char tempC = '\0';
-    char temp[LEN_TEMP] = {'\0'};
+    setlinebuf(stdout);
+    //Yeah I have no idea whats going on here.
+    //Copied this whole thing into another folder for testing.
+    //And it worked perfecally...
+    //TLDR: select always reads '\n', withouth the users input.
+    char select = '\0';
+    char temp[LEN_CONF] = {'\0'};
+
     printf("\n%s ", message);
     if(yes == 1 && no == 0)
-        printf("(Y/n)\n > "); //I have tryed putting it there
+        puts("(Y/n)"); //I have tryed putting it there
     else if(yes == 0 && no == 1)
-        printf("(y/N)\n > "); 
+        puts("(y/N)"); 
     else
-        printf("(y/n)\n > ");
-
-    //printf(" > "); //for some unknown reason it dosent print this before scanf
-    //puts()
-    //fgets
-    //puts(" > ");   //gdb shows nothing, one moment tempC is '\0', then its '\n'.
-    
-    while(1)
     {
-        //tempC = '\0';
-        //printf(" > ");
-        scanf("%c", &tempC); //and reads the \n character every time
-        
-        //printf("\n");
-        if(yes == 1 && no == 0)
+        puts("(y/n)");
+    }
+    
+    //fflush(stdout);
+
+    fputs("> ", stdout);
+    //fflush(stdout);
+    fflush(stdout);
+    //printf(" something ");
+    //sprintf(stdout, " will you do anything? > ");
+    //sprintf(stdout, " > ");
+    scanf(" %c", &select); //I dont like this, as it dosent read '\n' from the user...
+    //select = getchar();
+    //fflush(stdout);
+    //fflush(stdin);
+    //fgets(temp, LEN_CONF, stdin);
+    //scanf("%c", &select);
+   // scanf("%[^\n]", temp);
+    //select = getc(stdin);
+    //select = *temp;
+    fflush(stdout);
+
+    if(yes == 1 && no == 0)
         {
-            if(tempC == 'Y' || tempC == 'y' || tempC == '\n')
+            if(select == 'Y' || select == 'y' || select == '\n')
                 return 1;
-            else if(tempC == 'n' || tempC == 'N')
+            else if(select == 'n' || select == 'N')
                 return 0;
         }
-        else if(yes == 0 &&  no == 1)
-        {
-            if(tempC == 'N' || tempC == 'n' || tempC == '\n')
-                return 0;
-            else if(tempC == 'y' || tempC == 'Y')
-                return 1;
-        }
-        else
-        {
-            if(tempC == 'N' || tempC == 'n')
-                return 0;
-            else if(tempC == 'y' || tempC == 'Y')
-                return 1;
-        }
-        printf("Choice %c was not understood!\n", tempC);
-        printf("\nPlease input a valid choice! ");
-        if(yes == 1 && no == 0)
-            printf("(Y/n)\n > ");
-        else if(yes == 0 && no == 1)
-            printf("(y/N)\n > ");
-        else
-            printf("(y/n)\n > ");
+    else if(yes == 0 &&  no == 1)
+    {
+        if(select == 'N' || select == 'n' || select == '\n')
+            return 0;
+        else if(select == 'y' || select == 'Y')
+            return 1;
+    }
+    else
+    {
+        if(select == 'N' || select == 'n')
+            return 0;
+        else if(select == 'y' || select == 'Y')
+            return 1;
     }
 }
 

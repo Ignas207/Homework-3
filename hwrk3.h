@@ -8,6 +8,7 @@
 #define ACCOUNT_DIGEST_LEN 19
 #define TRANSACTION_DIGEST_LEN 40
 #define LEN_TEMP 300
+#define LEN_CONF 30
 
 #define ESC 27
 
@@ -49,7 +50,7 @@ typedef struct
     float balanceDelta;
 } TransactionsData;
 
-void NodeSelect(Accounts *A, Transactions *T);
+void NodeSelect(Accounts *A, Transactions *T, int edit);
 int SearchMenu(char *search);
 void Menu(Accounts **A, Transactions **T, int amountA, int amountT); //working on it
 
